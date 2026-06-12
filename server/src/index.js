@@ -31,7 +31,15 @@ app.use(cookieParser());
 
 // Security Middlewares
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    // Allow if no origin (e.g. mobile apps, curl), exactly matches clientUrl, or is any vercel.app domain
+    if (!origin || origin === clientUrl || origin.endsWith('.vercel.app') || origin === 'http://localhost:5173') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
