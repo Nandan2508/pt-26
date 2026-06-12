@@ -34,7 +34,7 @@ export default function Navbar() {
       {/* Right Side Actions */}
       <div className="flex items-center gap-6 ml-4">
         
-        {!user && (
+        {/*!user && (
           <div className="hidden md:flex items-center gap-3 bg-surface-highlight border border-border px-4 py-2 rounded-lg hover:border-primary transition-colors">
             <div className="bg-primary/20 p-1.5 rounded text-primary">
               <ShieldAlert className="w-4 h-4" />
@@ -45,7 +45,7 @@ export default function Navbar() {
             </div>
             <ChevronRight className="w-4 h-4 text-text-secondary ml-2" />
           </div>
-        )}
+        )*/}
 
         {user ? (
           <div className="flex items-center gap-4">
@@ -70,12 +70,14 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="flex items-center gap-3">
+            {/* 
             <Link to="/login" className="text-sm font-medium text-text-primary hover:text-primary transition-colors">
               Log in
             </Link>
             <Link to="/register" className="text-sm font-medium bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg transition-colors">
               Sign up
             </Link>
+            */}
           </div>
         )}
       </div>
