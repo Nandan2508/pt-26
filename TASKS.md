@@ -1472,7 +1472,7 @@ Prepare for production.
 
 ---
 
-### [ ] P10-D1 [SHARED]
+### [x] P10-D1 [SHARED]
 
 Configure CORS for production.
 
@@ -1482,7 +1482,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P10-D2 [SHARED]
+### [x] P10-D2 [SHARED]
 
 Implement Rate Limiting.
 
@@ -1492,7 +1492,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P10-D3 [SHARED]
+### [x] P10-D3 [SHARED]
 
 Deploy.
 
