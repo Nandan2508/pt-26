@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const companySchema = new mongoose.Schema(
   {
@@ -54,4 +54,4 @@ companySchema.pre('save', function (next) {
 
 const Company = mongoose.model('Company', companySchema);
 
-export default Company;
+module.exports = ;

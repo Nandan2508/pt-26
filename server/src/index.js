@@ -11,11 +11,21 @@ if (missingVars.length > 0) {
   process.exit(1);
 }
 
+const cookieParser = require('cookie-parser');
+const authRoutes = require('./routes/authRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to Database
 connectDB();
+
+// Middlewares
+app.use(express.json());
+app.use(cookieParser());
+
+// Routes
+app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Thapar Placement Tracker API is running');

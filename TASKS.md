@@ -860,7 +860,7 @@ Protect Discussion and Resource modules.
 
 ---
 
-### [ ] P2-A1 [AUTH]
+### [x] P2-A1 [AUTH]
 
 Create password hashing utility.
 
@@ -872,7 +872,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P2-A2 [AUTH]
+### [x] P2-A2 [AUTH]
 
 Create Register API.
 
@@ -902,7 +902,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P2-A3 [AUTH]
+### [x] P2-A3 [AUTH]
 
 Create Login API.
 
@@ -919,7 +919,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P2-A4 [AUTH]
+### [x] P2-A4 [AUTH]
 
 Create Current User API.
 
@@ -935,7 +935,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P2-A5 [AUTH]
+### [x] P2-A5 [AUTH]
 
 Create Logout API.
 
@@ -951,7 +951,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P2-A6 [AUTH]
+### [x] P2-A6 [AUTH]
 
 Create Auth Middleware.
 
