@@ -1,9 +1,9 @@
 import React from 'react';
-import { Search, ShieldAlert, ChevronRight, LogOut, User as UserIcon } from 'lucide-react';
+import { Search, ShieldAlert, ChevronRight, LogOut, User as UserIcon, Menu } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function Navbar() {
+export default function Navbar({ toggleSidebar }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -18,10 +18,17 @@ export default function Navbar() {
   };
 
   return (
-    <header className="h-16 border-b border-border bg-background flex items-center justify-between px-8 sticky top-0 z-10 w-full">
-      {/* Search Bar */}
-      <div className="flex-1 max-w-xl">
-        <div className="relative flex items-center w-full h-10 rounded-lg bg-surface-highlight border border-border px-3 overflow-hidden">
+    <header className="h-16 border-b border-border bg-background flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 w-full">
+      <div className="flex items-center gap-4 flex-1 max-w-xl">
+        <button 
+          onClick={toggleSidebar}
+          className="md:hidden p-2 -ml-2 text-text-secondary hover:text-text-primary hover:bg-surface-highlight rounded-lg transition-colors"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+        
+        {/* Search Bar */}
+        <div className="hidden sm:flex relative items-center w-full h-10 rounded-lg bg-surface-highlight border border-border px-3 overflow-hidden">
           <Search className="w-4 h-4 text-text-secondary mr-2" />
           <input 
             type="text" 

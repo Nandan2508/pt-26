@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Bell, 
   Filter, 
@@ -67,7 +67,12 @@ export default function PlacementUpdates() {
   }, [page]);
 
   // Debounced search
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const timer = setTimeout(() => {
       if (page !== 1) setPage(1);
       else fetchCompanies();
@@ -135,8 +140,16 @@ export default function PlacementUpdates() {
         </div>
 
         {/* Table */}
-        <div className="overflow-auto flex-1 min-h-0">
-          <table className="w-full text-left text-sm text-text-secondary relative">
+        <div className="overflow-x-auto w-full flex-1 min-h-0 relative">
+          {isLoading && companies.length > 0 && (
+            <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-20 flex items-center justify-center">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-sm font-medium text-text-primary">Updating Data...</span>
+              </div>
+            </div>
+          )}
+          <table className="w-full text-left text-sm text-text-secondary relative min-w-[800px]">
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
@@ -157,10 +170,15 @@ export default function PlacementUpdates() {
             </thead>
             <tbody className="divide-y divide-border">
               {(() => {
-                if (isLoading) {
+                if (isLoading && companies.length === 0) {
                   return (
                     <tr>
-                      <td colSpan="8" className="p-8 text-center text-text-secondary">Loading companies...</td>
+                      <td colSpan="8" className="p-8 text-center text-text-secondary">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                          Loading companies...
+                        </div>
+                      </td>
                     </tr>
                   );
                 }
