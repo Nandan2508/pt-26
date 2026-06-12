@@ -76,7 +76,35 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
   }
 
   const skip = (page - 1) * limit;
-  const companies = await Company.find(query).skip(skip).limit(Number(limit)).sort({ createdAt: -1 });
+  
+  const companies = await Company.aggregate([
+    { $match: query },
+    {
+      $lookup: {
+        from: 'notices',
+        localField: '_id',
+        foreignField: 'companyId',
+        as: 'notices'
+      }
+    },
+    {
+      $addFields: {
+        latestNoticeDate: {
+          $max: {
+            $concatArrays: [
+              { $map: { input: "$notices", as: "n", in: "$$n.noticeDate" } },
+              ["$createdAt"]
+            ]
+          }
+        }
+      }
+    },
+    { $sort: { latestNoticeDate: -1, _id: -1 } },
+    { $skip: skip },
+    { $limit: Number(limit) },
+    { $project: { notices: 0 } }
+  ]);
+
   const total = await Company.countDocuments(query);
   const distinctNames = await Company.distinct('name', query);
   const totalCompaniesCount = distinctNames.length;

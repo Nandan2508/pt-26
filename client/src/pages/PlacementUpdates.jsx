@@ -153,7 +153,7 @@ export default function PlacementUpdates() {
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
-                <th className="px-3 py-3 font-medium">Date Added</th>
+                <th className="px-3 py-3 font-medium">Notice Date</th>
                 <th className="px-3 py-3 font-medium">JD</th>
                 <th className="px-3 py-3 font-medium">Type</th>
                 <th className="px-3 py-3 font-medium">Stipend</th>
@@ -213,7 +213,7 @@ export default function PlacementUpdates() {
                           </td>
                         )}
                         <td className="px-3 py-3 text-xs whitespace-nowrap">
-                          {new Date(update.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          {new Date(update.latestNoticeDate || update.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </td>
                         <td className="px-3 py-3">
                           <div className="flex flex-col gap-1">
