@@ -89,6 +89,7 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
     },
     {
       $addFields: {
+        hasNotice: { $gt: [{ $size: "$notices" }, 0] },
         latestNoticeDate: {
           $cond: {
             if: { $gt: [{ $size: "$notices" }, 0] },
@@ -98,7 +99,7 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
         }
       }
     },
-    { $sort: { latestNoticeDate: -1, _id: -1 } },
+    { $sort: { hasNotice: -1, latestNoticeDate: -1, _id: -1 } },
     { $skip: skip },
     { $limit: Number(limit) },
     { $project: { notices: 0 } }
