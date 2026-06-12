@@ -974,7 +974,7 @@ Build company management APIs.
 
 ---
 
-### [ ] P3-C1 [COMPANY]
+### [x] P3-C1 [COMPANY]
 
 Create Company Service Layer.
 
@@ -994,7 +994,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P3-C2 [COMPANY]
+### [x] P3-C2 [COMPANY]
 
 Create Create Company API.
 
@@ -1012,7 +1012,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P3-C3 [COMPANY]
+### [x] P3-C3 [COMPANY]
 
 Create Update Company API.
 
@@ -1028,7 +1028,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P3-C4 [COMPANY]
+### [x] P3-C4 [COMPANY]
 
 Create Delete Company API.
 
@@ -1044,7 +1044,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P3-C5 [COMPANY]
+### [x] P3-C5 [COMPANY]
 
 Create Get All Companies API.
 
@@ -1060,7 +1060,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P3-C6 [COMPANY]
+### [x] P3-C6 [COMPANY]
 
 Implement Search.
 
@@ -1076,7 +1076,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P3-C7 [COMPANY]
+### [x] P3-C7 [COMPANY]
 
 Implement Filters.
 
