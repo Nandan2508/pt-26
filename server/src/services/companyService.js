@@ -90,11 +90,10 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
     {
       $addFields: {
         latestNoticeDate: {
-          $max: {
-            $concatArrays: [
-              { $map: { input: "$notices", as: "n", in: "$$n.noticeDate" } },
-              ["$createdAt"]
-            ]
+          $cond: {
+            if: { $gt: [{ $size: "$notices" }, 0] },
+            then: { $max: "$notices.noticeDate" },
+            else: "$createdAt"
           }
         }
       }
