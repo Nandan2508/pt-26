@@ -28,6 +28,12 @@ export default function PlacementUpdates() {
   const [pages, setPages] = useState(1);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  // Filters State
+  const [filterType, setFilterType] = useState('All Types');
+  const [filterBranch, setFilterBranch] = useState('All Branches');
+  const [filterNormalCG, setFilterNormalCG] = useState('All');
+  const [filterInternalCG, setFilterInternalCG] = useState('All');
   
   const navigate = useNavigate();
 
@@ -38,7 +44,11 @@ export default function PlacementUpdates() {
         params: {
           page,
           limit: 10,
-          search
+          search,
+          type: filterType !== 'All Types' ? filterType : undefined,
+          branch: filterBranch !== 'All Branches' ? filterBranch : undefined,
+          normalCutoff: filterNormalCG !== 'All' ? parseFloat(filterNormalCG.replace('>= ', '')) : undefined,
+          internalCutoff: filterInternalCG !== 'All' ? parseFloat(filterInternalCG.replace('>= ', '')) : undefined
         }
       });
       setCompanies(res.data.companies);
@@ -63,7 +73,7 @@ export default function PlacementUpdates() {
       else fetchCompanies();
     }, 500);
     return () => clearTimeout(timer);
-  }, [search]);
+  }, [search, filterType, filterBranch, filterNormalCG, filterInternalCG]);
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto h-full">
@@ -79,20 +89,25 @@ export default function PlacementUpdates() {
         </button>
       </div>
 
-      {/* Filters Bar - Keeping mock filters for UI completeness for now */}
+      {/* Filters Bar */}
       <div className="bg-surface-highlight border border-border rounded-xl p-4 flex flex-wrap items-end gap-4">
-        <FilterSelect label="Type" options={['All Types', 'FTE', 'Internship']} />
-        <FilterSelect label="JD Type" options={['All JDs', 'SDE', 'Analyst']} />
-        <FilterSelect label="Branches" options={['All Branches', 'BT', 'BME', 'CHE', 'CIE', 'CCA', 'COE', 'COPC', 'COBS', 'ENC', 'ECE', 'EVD', 'EIC', 'MEE', 'MEC', 'RAI', 'ELE', 'EEC']} />
-        <FilterSelect label="CGPA (Normal)" options={['All', '>= 7.0', '>= 8.0']} />
-        <FilterSelect label="CGPA (Internal)" options={['All', '>= 7.5', '>= 8.5']} />
+        <FilterSelect label="Type" options={['All Types', 'FTE', 'Internship']} value={filterType} onChange={(e) => setFilterType(e.target.value)} />
+        <FilterSelect label="Branches" options={['All Branches', 'BT', 'BME', 'CHE', 'CIE', 'CCA', 'COE', 'COPC', 'COBS', 'ENC', 'ECE', 'EVD', 'EIC', 'MEE', 'MEC', 'RAI', 'ELE', 'EEC']} value={filterBranch} onChange={(e) => setFilterBranch(e.target.value)} />
+        <FilterSelect label="CGPA (Normal)" options={['All', '>= 7.0', '>= 8.0']} value={filterNormalCG} onChange={(e) => setFilterNormalCG(e.target.value)} />
+        <FilterSelect label="CGPA (Internal)" options={['All', '>= 7.5', '>= 8.5']} value={filterInternalCG} onChange={(e) => setFilterInternalCG(e.target.value)} />
         
         <div className="flex items-center gap-3 ml-auto">
-          <button className="text-sm text-text-secondary hover:text-text-primary px-3 py-2 transition-colors">
+          <button 
+            onClick={() => {
+              setFilterType('All Types');
+              setFilterBranch('All Branches');
+              setFilterNormalCG('All');
+              setFilterInternalCG('All');
+              setSearch('');
+            }}
+            className="text-sm text-text-secondary hover:text-text-primary px-3 py-2 transition-colors"
+          >
             Reset
-          </button>
-          <button className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-            <Filter className="w-4 h-4" /> Filters
           </button>
         </div>
       </div>

@@ -48,7 +48,7 @@ const getCompany = async (idOrSlug) => {
   return company;
 };
 
-const getCompanies = async ({ search, role, type, branch, page = 1, limit = 10 }) => {
+const getCompanies = async ({ search, role, type, branch, normalCutoff, internalCutoff, page = 1, limit = 10 }) => {
   const query = {};
 
   if (search) {
@@ -64,7 +64,15 @@ const getCompanies = async ({ search, role, type, branch, page = 1, limit = 10 }
   }
 
   if (branch) {
-    query.branches = { $in: [branch] }; // Checks if 'branch' is in the branches array
+    query.branches = { $in: [branch, /^all$/i] }; 
+  }
+
+  if (normalCutoff !== undefined) {
+    query.normalCutoff = { $gte: Number(normalCutoff) };
+  }
+
+  if (internalCutoff !== undefined) {
+    query.internalCutoff = { $gte: Number(internalCutoff) };
   }
 
   const skip = (page - 1) * limit;
