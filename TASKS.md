@@ -224,7 +224,7 @@ resources.png
 
 ## Layout System
 
-### [ ] P0.5-U1 [SHARED]
+### [x] P0.5-U1 [SHARED]
 
 Create Main Layout.
 
@@ -249,7 +249,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-U2 [SHARED]
+### [x] P0.5-U2 [SHARED]
 
 Create Sidebar Navigation.
 
@@ -276,7 +276,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-U3 [SHARED]
+### [x] P0.5-U3 [SHARED]
 
 Create Route Structure.
 
@@ -308,7 +308,7 @@ Acceptance Criteria
 
 ## Dashboard
 
-### [ ] P0.5-D1 [DASHBOARD]
+### [x] P0.5-D1 [DASHBOARD]
 
 Create Dashboard Page.
 
@@ -324,7 +324,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-D2 [DASHBOARD]
+### [x] P0.5-D2 [DASHBOARD]
 
 Create Statistics Cards.
 
@@ -340,7 +340,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-D3 [DASHBOARD]
+### [x] P0.5-D3 [DASHBOARD]
 
 Create Latest Placement Updates Table.
 
@@ -352,7 +352,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-D4 [DASHBOARD]
+### [x] P0.5-D4 [DASHBOARD]
 
 Create Notices Widget.
 
@@ -364,7 +364,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-D5 [DASHBOARD]
+### [x] P0.5-D5 [DASHBOARD]
 
 Create Mini Eligibility Widget.
 
