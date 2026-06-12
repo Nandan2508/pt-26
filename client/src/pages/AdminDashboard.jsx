@@ -18,6 +18,7 @@ export default function AdminDashboard() {
   const [newCompany, setNewCompany] = useState({
     name: '', role: '', type: 'FTE', stipend: '', package: '', normalCutoff: '', internalCutoff: '', branches: ''
   });
+  const [jdFile, setJdFile] = useState(null);
 
   // Notices State
   const [newNotice, setNewNotice] = useState({ companyId: '', noticeDate: '' });
@@ -44,12 +45,32 @@ export default function AdminDashboard() {
     e.preventDefault();
     try {
       const branchesArray = newCompany.branches.split(',').map(b => b.trim());
-      await api.post('/companies', {
-        ...newCompany,
-        branches: branchesArray
+      
+      const formData = new FormData();
+      formData.append('name', newCompany.name);
+      formData.append('role', newCompany.role);
+      formData.append('type', newCompany.type);
+      formData.append('stipend', newCompany.stipend);
+      formData.append('package', newCompany.package);
+      formData.append('normalCutoff', newCompany.normalCutoff);
+      formData.append('internalCutoff', newCompany.internalCutoff);
+      // Append branches as a JSON string or multiple fields. Since the backend expects an array,
+      // and we are sending FormData, we should send it as a JSON string and parse it in backend,
+      // or append each branch. Let's send multiple 'branches' fields so backend array receives it.
+      branchesArray.forEach(b => formData.append('branches', b));
+      
+      if (jdFile) {
+        formData.append('jdFile', jdFile);
+      }
+
+      await api.post('/companies', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
       alert('Company created successfully!');
       setNewCompany({ name: '', role: '', type: 'FTE', stipend: '', package: '', normalCutoff: '', internalCutoff: '', branches: '' });
+      setJdFile(null);
       fetchCompanies();
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to create company');
@@ -113,7 +134,12 @@ export default function AdminDashboard() {
               <h3 className="text-lg font-semibold text-white mb-4">Add Company</h3>
               <form onSubmit={handleCreateCompany} className="flex flex-col gap-3">
                 <input required type="text" placeholder="Company Name" value={newCompany.name} onChange={e => setNewCompany({...newCompany, name: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
-                <input required type="text" placeholder="Role (e.g. SDE)" value={newCompany.role} onChange={e => setNewCompany({...newCompany, role: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
+                <input required type="text" placeholder="JD Title (e.g. SDE)" value={newCompany.role} onChange={e => setNewCompany({...newCompany, role: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
+                
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-text-secondary">JD Document (PDF/Doc/Image)</label>
+                  <input type="file" onChange={e => setJdFile(e.target.files[0])} className="bg-surface border border-border rounded p-1.5 text-sm text-text-secondary file:mr-3 file:bg-primary file:border-none file:text-white file:px-3 file:py-1 file:rounded-sm file:text-xs file:cursor-pointer" />
+                </div>
                 <select value={newCompany.type} onChange={e => setNewCompany({...newCompany, type: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white">
                   <option>FTE</option>
                   <option>Internship</option>
@@ -139,7 +165,7 @@ export default function AdminDashboard() {
                   <thead className="bg-surface text-xs border-b border-border">
                     <tr>
                       <th className="p-3">Company</th>
-                      <th className="p-3">Role</th>
+                      <th className="p-3">JD Title</th>
                       <th className="p-3">Cutoffs (N/I)</th>
                       <th className="p-3 text-right">Actions</th>
                     </tr>

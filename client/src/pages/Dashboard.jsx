@@ -85,7 +85,7 @@ export default function Dashboard() {
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
-                <th className="px-3 py-3 font-medium">Role</th>
+                <th className="px-3 py-3 font-medium">JD</th>
                 <th className="px-3 py-3 font-medium">Type</th>
                 <th className="px-3 py-3 font-medium">Stipend</th>
                 <th className="px-3 py-3 font-medium">Package</th>
@@ -113,7 +113,21 @@ export default function Dashboard() {
                       </div>
                       <span className="truncate">{update.name}</span>
                     </td>
-                    <td className="px-3 py-3">{update.role || '—'}</td>
+                    <td className="px-3 py-3">
+                      <div className="flex flex-col gap-1">
+                        <span>{update.role || '—'}</span>
+                        {update.jdLink && (
+                          <a 
+                            href={update.jdLink} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline flex items-center gap-1"
+                          >
+                            View Doc <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-3 py-3">{update.type || '—'}</td>
                     <td className="px-3 py-3">{update.stipend || '—'}</td>
                     <td className="px-3 py-3">{update.package || '—'}</td>

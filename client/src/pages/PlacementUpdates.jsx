@@ -80,7 +80,7 @@ export default function PlacementUpdates() {
       {/* Filters Bar - Keeping mock filters for UI completeness for now */}
       <div className="bg-surface-highlight border border-border rounded-xl p-4 flex flex-wrap items-end gap-4">
         <FilterSelect label="Type" options={['All Types', 'FTE', 'Internship']} />
-        <FilterSelect label="Role" options={['All Roles', 'SDE', 'Analyst']} />
+        <FilterSelect label="JD Type" options={['All JDs', 'SDE', 'Analyst']} />
         <FilterSelect label="Branches" options={['All Branches', 'COE', 'ENC']} />
         <FilterSelect label="CGPA (Normal)" options={['All', '>= 7.0', '>= 8.0']} />
         <FilterSelect label="CGPA (Internal)" options={['All', '>= 7.5', '>= 8.5']} />
@@ -123,7 +123,7 @@ export default function PlacementUpdates() {
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
-                <th className="px-3 py-3 font-medium">Role</th>
+                <th className="px-3 py-3 font-medium">JD</th>
                 <th className="px-3 py-3 font-medium">Type</th>
                 <th className="px-3 py-3 font-medium">Stipend</th>
                 <th className="px-3 py-3 font-medium">Package</th>
@@ -155,7 +155,21 @@ export default function PlacementUpdates() {
                     </div>
                     <span className="truncate max-w-[150px]" title={update.name}>{update.name}</span>
                   </td>
-                  <td className="px-3 py-3">{update.role}</td>
+                  <td className="px-3 py-3">
+                    <div className="flex flex-col gap-1">
+                      <span>{update.role || '—'}</span>
+                      {update.jdLink && (
+                        <a 
+                          href={update.jdLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary hover:underline flex items-center gap-1"
+                        >
+                          View Doc <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-3 py-3">{update.type}</td>
                   <td className="px-3 py-3">{update.stipend || '—'}</td>
                   <td className="px-3 py-3">{update.package || '—'}</td>

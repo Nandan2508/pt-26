@@ -166,7 +166,7 @@ export default function EligibilitySimulator() {
                     <thead className="text-xs border-b border-border">
                       <tr>
                         <th className="px-4 py-3 font-medium text-text-secondary">Company</th>
-                        <th className="px-4 py-3 font-medium text-text-secondary">Roles Offered</th>
+                        <th className="px-4 py-3 font-medium text-text-secondary">JD</th>
                         <th className="px-4 py-3 font-medium text-center">CGPA Cutoff</th>
                         <th className="px-4 py-3 font-medium text-text-secondary">Branches Allowed</th>
                         <th className="px-4 py-3 font-medium text-center text-text-secondary">Status Details</th>

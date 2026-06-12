@@ -2,7 +2,11 @@ const companyService = require('../services/companyService');
 
 const createCompany = async (req, res) => {
   try {
-    const company = await companyService.createCompany(req.body);
+    const companyData = { ...req.body };
+    if (req.file) {
+      companyData.jdLink = req.file.path;
+    }
+    const company = await companyService.createCompany(companyData);
     res.status(201).json({ message: 'Company created successfully', company });
   } catch (error) {
     const statusCode = error.statusCode || 400;
@@ -12,7 +16,11 @@ const createCompany = async (req, res) => {
 
 const updateCompany = async (req, res) => {
   try {
-    const company = await companyService.updateCompany(req.params.id, req.body);
+    const companyData = { ...req.body };
+    if (req.file) {
+      companyData.jdLink = req.file.path;
+    }
+    const company = await companyService.updateCompany(req.params.id, companyData);
     res.status(200).json({ message: 'Company updated successfully', company });
   } catch (error) {
     const statusCode = error.statusCode || 400;
