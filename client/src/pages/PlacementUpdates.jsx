@@ -22,7 +22,8 @@ const FilterSelect = ({ label, options, value, onChange }) => (
 
 export default function PlacementUpdates() {
   const [companies, setCompanies] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [totalRoles, setTotalRoles] = useState(0);
+  const [totalCompanies, setTotalCompanies] = useState(0);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [search, setSearch] = useState('');
@@ -41,7 +42,8 @@ export default function PlacementUpdates() {
         }
       });
       setCompanies(res.data.companies);
-      setTotal(res.data.total);
+      setTotalRoles(res.data.total);
+      setTotalCompanies(res.data.totalCompaniesCount || res.data.total);
       setPages(res.data.pages);
     } catch (error) {
       console.error('Failed to fetch companies', error);
@@ -232,7 +234,7 @@ export default function PlacementUpdates() {
         {/* Pagination */}
         <div className="p-4 border-t border-border flex items-center justify-between">
           <span className="text-sm text-text-secondary">
-            Showing {(page - 1) * 10 + 1} to {Math.min(page * 10, total)} of {total} companies
+            Showing {(page - 1) * 10 + 1} to {Math.min(page * 10, totalRoles)} of {totalRoles} roles across {totalCompanies} unique companies
           </span>
           <div className="flex items-center gap-1">
             <button 
