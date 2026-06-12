@@ -138,7 +138,6 @@ export default function PlacementUpdates() {
                 <th className="px-3 py-3 font-medium text-center">Discussion Link</th>
               </tr>
             </thead>
-            </thead>
             <tbody className="divide-y divide-border">
               {(() => {
                 if (isLoading) {
