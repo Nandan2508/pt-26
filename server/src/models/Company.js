@@ -47,8 +47,8 @@ const companySchema = new mongoose.Schema(
 
 // Slug generation middleware
 companySchema.pre('save', function () {
-  if (this.isModified('name')) {
-    this.slug = this.name
+  if (this.isModified('name') || this.isModified('role')) {
+    this.slug = (this.name + '-' + this.role)
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)+/g, '');

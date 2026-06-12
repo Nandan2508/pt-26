@@ -70,10 +70,13 @@ const getCompanies = async ({ search, role, type, branch, page = 1, limit = 10 }
   const skip = (page - 1) * limit;
   const companies = await Company.find(query).skip(skip).limit(Number(limit)).sort({ createdAt: -1 });
   const total = await Company.countDocuments(query);
+  const distinctNames = await Company.distinct('name', query);
+  const totalCompaniesCount = distinctNames.length;
 
   return {
     companies,
     total,
+    totalCompaniesCount,
     page: Number(page),
     pages: Math.ceil(total / limit),
   };

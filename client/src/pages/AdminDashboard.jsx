@@ -207,21 +207,39 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {isCompanyLoading ? (
-                      <tr><td colSpan="4" className="p-4 text-center">Loading...</td></tr>
-                    ) : companies.map(company => (
-                      <tr key={company._id} className="hover:bg-surface/50">
-                        <td className="p-3 text-white font-medium">{company.name}</td>
-                        <td className="p-3">{company.role}</td>
-                        <td className="p-3">{company.normalCutoff} / {company.internalCutoff}</td>
-                        <td className="p-3 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <button onClick={() => handleEditClick(company)} className="p-1.5 text-blue-400 hover:bg-blue-400/10 rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
-                            <button onClick={() => handleDeleteCompany(company._id)} className="p-1.5 text-danger hover:bg-danger/10 rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                    {(() => {
+                      if (isCompanyLoading) {
+                        return <tr><td colSpan="4" className="p-4 text-center">Loading...</td></tr>;
+                      }
+
+                      const grouped = Object.values(companies.reduce((acc, curr) => {
+                        if (!acc[curr.name]) acc[curr.name] = { name: curr.name, roles: [] };
+                        acc[curr.name].roles.push(curr);
+                        return acc;
+                      }, {}));
+
+                      return grouped.map(company => (
+                        <React.Fragment key={company.name}>
+                          {company.roles.map((role, idx) => (
+                            <tr key={role._id} className="hover:bg-surface/50">
+                              {idx === 0 && (
+                                <td rowSpan={company.roles.length} className="p-3 text-white font-medium align-top border-b border-border">
+                                  {company.name}
+                                </td>
+                              )}
+                              <td className="p-3">{role.role}</td>
+                              <td className="p-3">{role.normalCutoff} / {role.internalCutoff}</td>
+                              <td className="p-3 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button onClick={() => handleEditClick(role)} className="p-1.5 text-blue-400 hover:bg-blue-400/10 rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
+                                  <button onClick={() => handleDeleteCompany(role._id)} className="p-1.5 text-danger hover:bg-danger/10 rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      ));
+                    })()}
                   </tbody>
                 </table>
               </div>

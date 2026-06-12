@@ -138,69 +138,94 @@ export default function PlacementUpdates() {
                 <th className="px-3 py-3 font-medium text-center">Discussion Link</th>
               </tr>
             </thead>
+            </thead>
             <tbody className="divide-y divide-border">
-              {isLoading ? (
-                <tr>
-                  <td colSpan="8" className="p-8 text-center text-text-secondary">Loading companies...</td>
-                </tr>
-              ) : companies.length === 0 ? (
-                <tr>
-                  <td colSpan="8" className="p-8 text-center text-text-secondary">No companies found.</td>
-                </tr>
-              ) : companies.map((update) => (
-                <tr key={update._id} className="hover:bg-surface/50 transition-colors">
-                  <td className="px-3 py-3 font-medium text-white flex items-center gap-2">
-                    <div className="w-6 h-6 rounded bg-white flex items-center justify-center text-background text-xs font-bold shrink-0">
-                      {update.name[0]?.toUpperCase()}
-                    </div>
-                    <span className="truncate max-w-[150px]" title={update.name}>{update.name}</span>
-                  </td>
-                  <td className="px-3 py-3">
-                    <div className="flex flex-col gap-1">
-                      <span>{update.role || '—'}</span>
-                      {update.jdLink && (
-                        <a 
-                          href={update.jdLink} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline flex items-center gap-1"
-                        >
-                          View Doc <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-3 py-3">{update.type}</td>
-                  <td className="px-3 py-3">{update.stipend || '—'}</td>
-                  <td className="px-3 py-3">{update.package || '—'}</td>
-                  <td className="px-3 py-3 border-x border-border/50">
-                    <div className="flex justify-between px-1">
-                      <span className="text-white whitespace-nowrap">{update.normalCutoff}</span>
-                      <span className="text-white whitespace-nowrap">{update.internalCutoff}</span>
-                    </div>
-                  </td>
-                  <td className="px-3 py-3 text-xs">
-                    <div className="flex flex-wrap gap-1 max-w-[200px]">
-                      {update.branches?.length > 0 
-                        ? update.branches.map((branch, i) => (
-                            <span key={i} className="bg-surface-highlight border border-border px-1.5 py-0.5 rounded text-[10px] whitespace-nowrap">
-                              {branch}
-                            </span>
-                          ))
-                        : '—'
-                      }
-                    </div>
-                  </td>
-                  <td className="px-3 py-3 text-center">
-                    <button 
-                      onClick={() => navigate(`/discussion/${update.slug}`)}
-                      className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap"
-                    >
-                      Join <ExternalLink className="w-3 h-3" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {(() => {
+                if (isLoading) {
+                  return (
+                    <tr>
+                      <td colSpan="8" className="p-8 text-center text-text-secondary">Loading companies...</td>
+                    </tr>
+                  );
+                }
+                
+                if (companies.length === 0) {
+                  return (
+                    <tr>
+                      <td colSpan="8" className="p-8 text-center text-text-secondary">No companies found.</td>
+                    </tr>
+                  );
+                }
+
+                const grouped = Object.values(companies.reduce((acc, curr) => {
+                  if (!acc[curr.name]) acc[curr.name] = { name: curr.name, roles: [] };
+                  acc[curr.name].roles.push(curr);
+                  return acc;
+                }, {}));
+
+                return grouped.map((company) => (
+                  <React.Fragment key={company.name}>
+                    {company.roles.map((update, idx) => (
+                      <tr key={update._id} className="hover:bg-surface/50 transition-colors">
+                        {idx === 0 && (
+                          <td rowSpan={company.roles.length} className="px-3 py-3 font-medium text-white border-b border-border align-top">
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 rounded bg-white flex items-center justify-center text-background text-xs font-bold shrink-0">
+                                {company.name[0]?.toUpperCase()}
+                              </div>
+                              <span className="truncate max-w-[150px]" title={company.name}>{company.name}</span>
+                            </div>
+                          </td>
+                        )}
+                        <td className="px-3 py-3">
+                          <div className="flex flex-col gap-1">
+                            <span>{update.role || '—'}</span>
+                            {update.jdLink && (
+                              <a 
+                                href={update.jdLink} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-xs text-primary hover:underline flex items-center gap-1"
+                              >
+                                View Doc <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">{update.type}</td>
+                        <td className="px-3 py-3">{update.stipend || '—'}</td>
+                        <td className="px-3 py-3">{update.package || '—'}</td>
+                        <td className="px-3 py-3 border-x border-border/50">
+                          <div className="flex justify-between px-1">
+                            <span className="text-white whitespace-nowrap">{update.normalCutoff}</span>
+                            <span className="text-white whitespace-nowrap">{update.internalCutoff}</span>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3 text-xs">
+                          <div className="flex flex-wrap gap-1 max-w-[200px]">
+                            {update.branches?.length > 0 
+                              ? update.branches.map((branch, i) => (
+                                  <span key={i} className="bg-surface-highlight border border-border px-1.5 py-0.5 rounded text-[10px] whitespace-nowrap">
+                                    {branch}
+                                  </span>
+                                ))
+                              : '—'
+                            }
+                          </div>
+                        </td>
+                        <td className="px-3 py-3 text-center">
+                          <button 
+                            onClick={() => navigate(`/discussion/${update.slug}`)}
+                            className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap"
+                          >
+                            Join <ExternalLink className="w-3 h-3" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ));
+              })()}
             </tbody>
           </table>
         </div>
