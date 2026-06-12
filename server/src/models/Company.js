@@ -15,6 +15,10 @@ const companySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    jdLink: {
+      type: String,
+      default: '',
+    },
     type: {
       type: String,
       required: true,
@@ -42,14 +46,13 @@ const companySchema = new mongoose.Schema(
 );
 
 // Slug generation middleware
-companySchema.pre('save', function (next) {
+companySchema.pre('save', function () {
   if (this.isModified('name')) {
     this.slug = this.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)+/g, '');
   }
-  next();
 });
 
 const Company = mongoose.model('Company', companySchema);
