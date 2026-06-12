@@ -86,12 +86,14 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
         foreignField: 'companyId',
         as: 'notices'
       }
+    },
     {
       $addFields: {
+        roleHasNotice: { $gt: [{ $size: "$notices" }, 0] },
         roleNoticeDate: {
           $cond: {
             if: { $gt: [{ $size: "$notices" }, 0] },
-            then: { $add: [ { $max: "$notices.noticeDate" }, 86399000 ] },
+            then: { $max: "$notices.noticeDate" },
             else: "$createdAt"
           }
         }
@@ -101,11 +103,12 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
       $group: {
         _id: "$name",
         roles: { $push: "$$ROOT" },
+        hasNotice: { $max: "$roleHasNotice" },
         latestNoticeDate: { $max: "$roleNoticeDate" },
         createdAt: { $max: "$createdAt" }
       }
     },
-    { $sort: { latestNoticeDate: -1, _id: -1 } },
+    { $sort: { hasNotice: -1, latestNoticeDate: -1, _id: -1 } },
     { $skip: skip },
     { $limit: Number(limit) },
     { $unwind: "$roles" },
