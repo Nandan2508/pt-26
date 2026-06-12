@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Building2, 
   MessageCircle, 
-  Calendar as CalendarIcon, 
-  Calculator,
-  MessageSquare,
   ArrowRight,
-  ExternalLink,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle
+  ExternalLink
 } from 'lucide-react';
-
-const mockUpdates = [
-  { company: 'Adobe', role: 'SDE', type: 'FTE', stipend: '—', package: '₹ 24.00 LPA', c_normal: '8.0', c_internal: '8.3', branches: 'COE, COPC, ENC, ECE, EIC, IT' },
-  { company: 'Atlassian', role: 'SDE', type: 'FTE', stipend: '—', package: '₹ 26.50 LPA', c_normal: '8.5', c_internal: '8.8', branches: 'COE, IT, ECE, EIC, ENC' },
-  { company: 'Rubrik', role: 'SDE Intern', type: 'Internship', stipend: '₹ 2.00 LPM', package: '—', c_normal: '7.5', c_internal: '8.0', branches: 'COE, IT, ECE, EE, ENC, COPC' },
-  { company: 'Deloitte', role: 'Data Analyst', type: 'FTE', stipend: '—', package: '₹ 11.00 LPA', c_normal: '7.0', c_internal: '7.5', branches: 'COE, ENC, ECE, IT, COPC' },
-  { company: 'ZS Associates', role: 'Decision Analyst', type: 'FTE', stipend: '—', package: '₹ 15.60 LPA', c_normal: '7.0', c_internal: '7.5', branches: 'COE, COPC, ENC, IT, ECE' },
-  { company: 'Microsoft', role: 'SDE', type: 'FTE', stipend: '—', package: '₹ 34.00 LPA', c_normal: '8.5', c_internal: '8.8', branches: 'COE, COPC, ECE, ENC, EIC' },
-  { company: 'Amazon', role: 'SDE', type: 'FTE', stipend: '—', package: '₹ 32.00 LPA', c_normal: '8.0', c_internal: '8.5', branches: 'COE, IT, ECE, EE, ENC, COPC' },
-  { company: 'Samsung', role: 'SDE Intern', type: 'Internship', stipend: '₹ 1.80 LPM', package: '—', c_normal: '7.0', c_internal: '7.5', branches: 'COE, ECE, IT, ENC' },
-];
+import api from '../services/api';
 
 export default function Dashboard() {
+  const [totalCompanies, setTotalCompanies] = useState(0);
+  const [latestUpdates, setLatestUpdates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setIsLoading(true);
+        // Fetch 10 latest companies
+        const response = await api.get('/companies', {
+          params: { page: 1, limit: 10 }
+        });
+        setTotalCompanies(response.data.total);
+        setLatestUpdates(response.data.companies);
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
-    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto">
+    <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto h-full">
       
       {/* Top Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -35,7 +45,9 @@ export default function Dashboard() {
           </div>
           <div className="flex flex-col">
             <span className="text-text-secondary text-sm font-medium mb-1">Total Companies</span>
-            <span className="text-white text-3xl font-bold mb-1">215</span>
+            <span className="text-white text-3xl font-bold mb-1">
+              {isLoading ? '...' : totalCompanies}
+            </span>
             <span className="text-text-secondary text-xs">Companies visited till date</span>
           </div>
         </div>
@@ -46,14 +58,14 @@ export default function Dashboard() {
           </div>
           <div className="flex flex-col">
             <span className="text-text-secondary text-sm font-medium mb-1">Active Discussions</span>
-            <span className="text-white text-3xl font-bold mb-1">48</span>
-            <span className="text-text-secondary text-xs">Active company chats</span>
+            <span className="text-white text-3xl font-bold mb-1">0</span>
+            <span className="text-text-secondary text-xs">Active company chats (Mocked)</span>
           </div>
         </div>
       </div>
 
       {/* Latest Placement Updates */}
-      <div className="bg-surface-highlight border border-border rounded-xl flex flex-col flex-1">
+      <div className="bg-surface-highlight border border-border rounded-xl flex flex-col flex-1 min-h-[400px]">
         <div className="p-5 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-primary/20 p-2 rounded-lg text-primary">
@@ -61,9 +73,12 @@ export default function Dashboard() {
             </div>
             <h2 className="text-lg font-semibold text-text-primary">Latest Placement Updates</h2>
           </div>
-          <a href="/placement-updates" className="text-sm text-primary hover:text-primary-hover flex items-center gap-1 font-medium transition-colors">
+          <button 
+            onClick={() => navigate('/placement-updates')}
+            className="text-sm text-primary hover:text-primary-hover flex items-center gap-1 font-medium transition-colors"
+          >
             View All Updates <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
         </div>
         <div className="overflow-auto flex-1 min-h-0">
           <table className="w-full text-left text-sm text-text-secondary relative">
@@ -81,34 +96,47 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {mockUpdates.map((update, idx) => (
-                <tr key={idx} className="hover:bg-surface/50 transition-colors">
-                  <td className="px-3 py-3 font-medium text-white flex items-center gap-2">
-                    <div className="w-6 h-6 rounded bg-white flex items-center justify-center text-background text-xs font-bold shrink-0">
-                      {update.company[0]}
-                    </div>
-                    <span className="truncate">{update.company}</span>
-                  </td>
-                  <td className="px-3 py-3">{update.role}</td>
-                  <td className="px-3 py-3">{update.type}</td>
-                  <td className="px-3 py-3">{update.stipend}</td>
-                  <td className="px-3 py-3">{update.package}</td>
-                  <td className="px-3 py-3 text-center whitespace-nowrap">{update.c_normal}</td>
-                  <td className="px-3 py-3 text-center whitespace-nowrap">{update.c_internal}</td>
-                  <td className="px-3 py-3 text-xs" title={update.branches}>{update.branches}</td>
-                  <td className="px-3 py-3 text-center">
-                    <button className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap">
-                      Join <ExternalLink className="w-3 h-3" />
-                    </button>
-                  </td>
+              {isLoading ? (
+                <tr>
+                  <td colSpan="9" className="text-center py-8">Loading updates...</td>
                 </tr>
-              ))}
+              ) : latestUpdates.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="text-center py-8">No companies added yet.</td>
+                </tr>
+              ) : (
+                latestUpdates.map((update) => (
+                  <tr key={update._id} className="hover:bg-surface/50 transition-colors">
+                    <td className="px-3 py-3 font-medium text-white flex items-center gap-2">
+                      <div className="w-6 h-6 rounded bg-white flex items-center justify-center text-background text-xs font-bold shrink-0">
+                        {update.name[0]?.toUpperCase()}
+                      </div>
+                      <span className="truncate">{update.name}</span>
+                    </td>
+                    <td className="px-3 py-3">{update.role || '—'}</td>
+                    <td className="px-3 py-3">{update.type || '—'}</td>
+                    <td className="px-3 py-3">{update.stipend || '—'}</td>
+                    <td className="px-3 py-3">{update.package || '—'}</td>
+                    <td className="px-3 py-3 text-center whitespace-nowrap">{update.normalCutoff || '—'}</td>
+                    <td className="px-3 py-3 text-center whitespace-nowrap">{update.internalCutoff || '—'}</td>
+                    <td className="px-3 py-3 text-xs" title={update.branches?.join(', ')}>
+                      {update.branches?.length > 0 ? update.branches.join(', ') : '—'}
+                    </td>
+                    <td className="px-3 py-3 text-center">
+                      <button 
+                        onClick={() => navigate(`/discussion/${update.slug}`)}
+                        className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap"
+                      >
+                        Join <ExternalLink className="w-3 h-3" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
-
-
     </div>
   );
 }

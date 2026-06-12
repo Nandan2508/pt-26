@@ -1102,7 +1102,7 @@ Build homepage.
 
 ---
 
-### [ ] P4-D1 [DASHBOARD]
+### [x] P4-D1 [DASHBOARD]
 
 Create Dashboard Layout.
 
@@ -1119,7 +1119,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P4-D2 [DASHBOARD]
+### [x] P4-D2 [DASHBOARD]
 
 Create Total Companies Card.
 
@@ -1133,7 +1133,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P4-D3 [DASHBOARD]
+### [x] P4-D3 [DASHBOARD]
 
 Create Latest Placement Updates Table.
 
@@ -1157,7 +1157,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P4-D4 [DASHBOARD]
+### [x] P4-D4 [DASHBOARD]
 
 Create Discussion Link Column.
 
@@ -1175,7 +1175,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P4-D5 [DASHBOARD]
+### [x] P4-D5 [DASHBOARD]
 
 Create Upcoming Notices Widget.
 
@@ -1193,7 +1193,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P4-D6 [DASHBOARD]
+### [x] P4-D6 [DASHBOARD]
 
 Create Mini Eligibility Widget.
 
