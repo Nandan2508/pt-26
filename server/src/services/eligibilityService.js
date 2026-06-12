@@ -8,7 +8,8 @@ const simulateEligibility = async (internalCGPA, branch) => {
   const notEligible = [];
 
   companies.forEach(company => {
-    const isBranchAllowed = company.branches.includes(branch);
+    const companyBranches = company.branches.map(b => b.toUpperCase());
+    const isBranchAllowed = companyBranches.includes(branch.toUpperCase()) || companyBranches.includes('ALL');
     
     // Check if the branch is allowed
     if (!isBranchAllowed) {

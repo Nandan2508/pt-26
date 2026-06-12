@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 
-const branchesList = ['COE', 'COPC', 'ENC', 'ECE', 'EIC', 'IT', 'EE', 'ME', 'CE', 'BT'];
+const branchesList = ['BT', 'BME', 'CHE', 'CIE', 'CCA', 'COE', 'COPC', 'COBS', 'ENC', 'ECE', 'EVD', 'EIC', 'MEE', 'MEC', 'RAI', 'ELE', 'EEC'];
 
 export default function EligibilitySimulator() {
   const [internalCGPA, setInternalCGPA] = useState('8.50');

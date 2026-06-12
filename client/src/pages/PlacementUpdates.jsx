@@ -83,7 +83,7 @@ export default function PlacementUpdates() {
       <div className="bg-surface-highlight border border-border rounded-xl p-4 flex flex-wrap items-end gap-4">
         <FilterSelect label="Type" options={['All Types', 'FTE', 'Internship']} />
         <FilterSelect label="JD Type" options={['All JDs', 'SDE', 'Analyst']} />
-        <FilterSelect label="Branches" options={['All Branches', 'COE', 'ENC']} />
+        <FilterSelect label="Branches" options={['All Branches', 'BT', 'BME', 'CHE', 'CIE', 'CCA', 'COE', 'COPC', 'COBS', 'ENC', 'ECE', 'EVD', 'EIC', 'MEE', 'MEC', 'RAI', 'ELE', 'EEC']} />
         <FilterSelect label="CGPA (Normal)" options={['All', '>= 7.0', '>= 8.0']} />
         <FilterSelect label="CGPA (Internal)" options={['All', '>= 7.5', '>= 8.5']} />
         
@@ -101,7 +101,7 @@ export default function PlacementUpdates() {
       <div className="bg-surface-highlight border border-border rounded-xl flex flex-col flex-1">
         {/* Table Toolbar */}
         <div className="p-4 border-b border-border flex flex-wrap items-center justify-between gap-4">
-          <span className="text-sm text-text-secondary font-medium">Total Companies: <span className="text-white">{total}</span></span>
+          <span className="text-sm text-text-secondary font-medium">Total Companies: <span className="text-white">{totalCompanies}</span></span>
           <div className="flex items-center gap-3">
             <div className="relative flex items-center h-9 rounded-lg bg-surface border border-border px-3">
               <Search className="w-4 h-4 text-text-secondary mr-2" />
