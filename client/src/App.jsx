@@ -9,6 +9,7 @@ import EligibilitySimulator from './pages/EligibilitySimulator';
 import PlacementCalendar from './pages/PlacementCalendar';
 import DiscussionHub from './pages/DiscussionHub';
 import InterviewResources from './pages/InterviewResources';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -22,8 +23,10 @@ function App() {
           <Route path="/placement-calendar" element={<PlacementCalendar />} />
           <Route path="/discussion" element={<DiscussionHub />} />
           <Route path="/resources" element={<InterviewResources />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Route>
       </Routes>
+
     </BrowserRouter>
   );
 }

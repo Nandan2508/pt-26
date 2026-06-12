@@ -1,21 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  Calendar as CalendarIcon,
-  Bell
+  Calendar as CalendarIcon
 } from 'lucide-react';
-
-const mockNotices = [
-  { company: 'Adobe', date: '20 May 2025', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30' },
-  { company: 'Atlassian', date: '28 May 2025', color: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-  { company: 'Deloitte', date: '2 Jun 2025', color: 'bg-orange-500/20 text-orange-400 border-orange-500/30' },
-  { company: 'ZS Associates', date: '10 Jun 2025', color: 'bg-green-500/20 text-green-400 border-green-500/30' },
-  { company: 'Amazon', date: '12 Jun 2025', color: 'bg-blue-400/20 text-blue-300 border-blue-400/30' },
-  { company: 'Microsoft', date: '9 May 2025', color: 'bg-purple-400/20 text-purple-300 border-purple-400/30' },
-  { company: 'Rubrik', date: '14 May 2025', color: 'bg-teal-500/20 text-teal-400 border-teal-500/30' },
-  { company: 'Samsung', date: '16 May 2025', color: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' },
-];
+import api from '../services/api';
 
 const FilterSelect = ({ label, options }) => (
   <div className="flex flex-col gap-1">
@@ -26,6 +15,35 @@ const FilterSelect = ({ label, options }) => (
 );
 
 export default function PlacementCalendar() {
+  const [notices, setNotices] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // We'll hardcode the viewing month to May 2025 for this UI mockup, 
+  // but we will render actual notices dynamically.
+  const viewingMonth = 4; // May (0-indexed)
+  const viewingYear = 2025;
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        setIsLoading(true);
+        const res = await api.get('/notices');
+        setNotices(res.data);
+      } catch (error) {
+        console.error('Failed to fetch notices:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchNotices();
+  }, []);
+
+  // Format date helper for the right panel
+  const formatDate = (dateString) => {
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto h-full">
       {/* Header */}
@@ -75,36 +93,27 @@ export default function PlacementCalendar() {
                 </div>
               ))}
               
-              {/* Mock Days - 35 cells */}
+              {/* Mock Days - 35 cells mapping dynamic notices if they match the date */}
               {Array.from({ length: 35 }).map((_, i) => {
                 const dayNum = i - 3; // start from April 27
                 const isCurrentMonth = dayNum > 0 && dayNum <= 31;
                 const displayNum = isCurrentMonth ? dayNum : (dayNum <= 0 ? 30 + dayNum : dayNum - 31);
                 
+                // Find notices for this specific day (Assuming May 2025)
+                const dayNotices = notices.filter(n => {
+                  const d = new Date(n.noticeDate);
+                  return isCurrentMonth && d.getDate() === displayNum && d.getMonth() === viewingMonth && d.getFullYear() === viewingYear;
+                });
+
                 return (
                   <div key={i} className={`p-2 border-r border-b border-border last:border-r-0 min-h-[100px] ${!isCurrentMonth ? 'opacity-30' : ''}`}>
                     <span className="text-sm font-medium text-text-secondary">{displayNum}</span>
-                    <div className="mt-2 space-y-1">
-                      {isCurrentMonth && dayNum === 1 && (
-                        <div className="text-[10px] px-2 py-1 rounded border bg-purple-500/20 text-purple-400 border-purple-500/30 truncate">
-                          ● Adobe<br/><span className="opacity-70">Notice Released</span>
+                    <div className="mt-2 space-y-1 overflow-y-auto max-h-[70px] hide-scrollbar">
+                      {dayNotices.map((n, idx) => (
+                        <div key={idx} className="text-[10px] px-2 py-1 rounded border bg-primary/20 text-primary border-primary/30 truncate">
+                          ● {n.companyId?.name || 'Unknown'}<br/><span className="opacity-70">Notice Released</span>
                         </div>
-                      )}
-                      {isCurrentMonth && dayNum === 2 && (
-                        <div className="text-[10px] px-2 py-1 rounded border bg-blue-500/20 text-blue-400 border-blue-500/30 truncate">
-                          ● Atlassian<br/><span className="opacity-70">Notice Released</span>
-                        </div>
-                      )}
-                      {isCurrentMonth && dayNum === 6 && (
-                        <div className="text-[10px] px-2 py-1 rounded border bg-green-500/20 text-green-400 border-green-500/30 truncate">
-                          ● ZS Associates<br/><span className="opacity-70">Notice Released</span>
-                        </div>
-                      )}
-                      {isCurrentMonth && dayNum === 7 && (
-                        <div className="text-[10px] px-2 py-1 rounded border bg-orange-500/20 text-orange-400 border-orange-500/30 truncate">
-                          ● Deloitte<br/><span className="opacity-70">Notice Released</span>
-                        </div>
-                      )}
+                      ))}
                     </div>
                   </div>
                 );
@@ -113,10 +122,7 @@ export default function PlacementCalendar() {
 
             {/* Legend */}
             <div className="p-4 flex items-center gap-6 overflow-x-auto">
-              <div className="flex items-center gap-2 text-xs text-text-secondary whitespace-nowrap"><span className="w-2 h-2 rounded-full bg-purple-400"></span> Notice Released</div>
-              <div className="flex items-center gap-2 text-xs text-text-secondary whitespace-nowrap"><span className="w-2 h-2 rounded-full bg-blue-400"></span> Notice Released</div>
-              <div className="flex items-center gap-2 text-xs text-text-secondary whitespace-nowrap"><span className="w-2 h-2 rounded-full bg-orange-400"></span> Notice Released</div>
-              <div className="flex items-center gap-2 text-xs text-text-secondary whitespace-nowrap"><span className="w-2 h-2 rounded-full bg-green-400"></span> Notice Released</div>
+              <div className="flex items-center gap-2 text-xs text-text-secondary whitespace-nowrap"><span className="w-2 h-2 rounded-full bg-primary"></span> Notice Released</div>
             </div>
           </div>
 
@@ -142,20 +148,26 @@ export default function PlacementCalendar() {
           <h2 className="text-lg font-semibold text-text-primary mb-6">Company Notices</h2>
           
           <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-            {mockNotices.map((notice, idx) => (
-              <div key={idx} className="flex items-center justify-between pb-4 border-b border-border last:border-0 last:pb-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded bg-white flex items-center justify-center text-background text-lg font-bold shrink-0">
-                    {notice.company[0]}
+            {isLoading ? (
+              <div className="text-sm text-text-secondary text-center py-4">Loading notices...</div>
+            ) : notices.length === 0 ? (
+              <div className="text-sm text-text-secondary text-center py-4">No notices released yet.</div>
+            ) : (
+              notices.map((notice) => (
+                <div key={notice._id} className="flex items-center justify-between pb-4 border-b border-border last:border-0 last:pb-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded bg-white flex items-center justify-center text-background text-lg font-bold shrink-0">
+                      {notice.companyId?.name?.[0]?.toUpperCase() || '?'}
+                    </div>
+                    <div className="flex flex-col overflow-hidden max-w-[150px]">
+                      <span className="text-sm font-medium text-white truncate">{notice.companyId?.name || 'Unknown'}</span>
+                      <span className="text-xs text-text-secondary">Notice Released</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-white">{notice.company}</span>
-                    <span className="text-xs text-text-secondary">Notice Released</span>
-                  </div>
+                  <span className="text-xs text-primary font-medium">{formatDate(notice.noticeDate)}</span>
                 </div>
-                <span className="text-xs text-primary font-medium">{notice.date}</span>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           <button className="w-full mt-6 py-2.5 border border-border hover:border-primary text-primary text-sm font-medium rounded-lg transition-colors">

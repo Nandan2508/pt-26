@@ -1275,7 +1275,7 @@ Track notice release dates.
 
 ---
 
-### [ ] P6-N1 [CALENDAR]
+### [x] P6-N1 [CALENDAR]
 
 Create Notice Service.
 
@@ -1292,7 +1292,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P6-N2 [CALENDAR]
+### [x] P6-N2 [CALENDAR]
 
 Create Notice APIs.
 
@@ -1310,7 +1310,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P6-N3 [CALENDAR]
+### [x] P6-N3 [CALENDAR]
 
 Integrate Calendar Frontend.
 
@@ -1418,7 +1418,7 @@ Manage platform data.
 
 ---
 
-### [ ] P9-A1 [ADMIN]
+### [x] P9-A1 [ADMIN]
 
 Create Admin Middleware.
 
@@ -1432,7 +1432,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P9-A2 [ADMIN]
+### [x] P9-A2 [ADMIN]
 
 Create Admin Seeder.
 
@@ -1448,7 +1448,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P9-A3 [ADMIN]
+### [x] P9-A3 [ADMIN]
 
 Create Admin Management Pages.
 
