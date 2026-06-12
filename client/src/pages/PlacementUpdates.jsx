@@ -153,7 +153,6 @@ export default function PlacementUpdates() {
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
-                <th className="px-3 py-3 font-medium">Notice Date</th>
                 <th className="px-3 py-3 font-medium">JD</th>
                 <th className="px-3 py-3 font-medium">Type</th>
                 <th className="px-3 py-3 font-medium">Stipend</th>
@@ -174,7 +173,7 @@ export default function PlacementUpdates() {
                 if (isLoading && companies.length === 0) {
                   return (
                     <tr>
-                      <td colSpan="9" className="p-8 text-center text-text-secondary">
+                      <td colSpan="8" className="p-8 text-center text-text-secondary">
                         <div className="flex flex-col items-center gap-3">
                           <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                           Loading companies...
@@ -187,7 +186,7 @@ export default function PlacementUpdates() {
                 if (companies.length === 0) {
                   return (
                     <tr>
-                      <td colSpan="9" className="p-8 text-center text-text-secondary">No companies found.</td>
+                      <td colSpan="8" className="p-8 text-center text-text-secondary">No companies found.</td>
                     </tr>
                   );
                 }
@@ -212,9 +211,6 @@ export default function PlacementUpdates() {
                             </div>
                           </td>
                         )}
-                        <td className="px-3 py-3 text-xs whitespace-nowrap">
-                          {new Date(update.latestNoticeDate || update.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                        </td>
                         <td className="px-3 py-3">
                           <div className="flex flex-col gap-1">
                             <span>{update.role || '—'}</span>
