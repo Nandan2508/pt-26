@@ -1,7 +1,22 @@
 import React from 'react';
-import { Search, ShieldAlert, ChevronRight } from 'lucide-react';
+import { Search, ShieldAlert, ChevronRight, LogOut, User as UserIcon } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/dashboard');
+  };
+
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    return name.charAt(0).toUpperCase();
+  };
+
   return (
     <header className="h-16 border-b border-border bg-background flex items-center justify-between px-8 sticky top-0 z-10 w-full">
       {/* Search Bar */}
@@ -19,22 +34,50 @@ export default function Navbar() {
       {/* Right Side Actions */}
       <div className="flex items-center gap-6 ml-4">
         
-        {/* Verify Banner */}
-        <div className="hidden md:flex items-center gap-3 bg-surface-highlight border border-border px-4 py-2 rounded-lg cursor-pointer hover:border-primary transition-colors">
-          <div className="bg-primary/20 p-1.5 rounded text-primary">
-            <ShieldAlert className="w-4 h-4" />
+        {!user && (
+          <div className="hidden md:flex items-center gap-3 bg-surface-highlight border border-border px-4 py-2 rounded-lg hover:border-primary transition-colors">
+            <div className="bg-primary/20 p-1.5 rounded text-primary">
+              <ShieldAlert className="w-4 h-4" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-text-primary text-sm font-medium leading-none mb-1">Verify with TIET Email</span>
+              <span className="text-text-secondary text-xs leading-none">Access exclusive discussions & PYQs</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-text-secondary ml-2" />
           </div>
-          <div className="flex flex-col">
-            <span className="text-text-primary text-sm font-medium leading-none mb-1">Verify with TIET Email</span>
-            <span className="text-text-secondary text-xs leading-none">Access exclusive discussions & PYQs</span>
-          </div>
-          <ChevronRight className="w-4 h-4 text-text-secondary ml-2" />
-        </div>
+        )}
 
-        {/* Avatar */}
-        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-lg cursor-pointer hover:bg-primary-hover transition-colors">
-          A
-        </div>
+        {user ? (
+          <div className="flex items-center gap-4">
+            {user.role === 'admin' && (
+              <Link to="/admin" className="text-sm font-medium text-primary hover:underline">
+                Admin Panel
+              </Link>
+            )}
+            <div className="flex items-center gap-3 bg-surface-highlight border border-border pl-2 pr-4 py-1.5 rounded-full">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold text-sm">
+                {getInitials(user.name)}
+              </div>
+              <span className="text-sm font-medium text-white max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
+              <button 
+                onClick={handleLogout}
+                className="ml-2 text-text-secondary hover:text-red-400 transition-colors"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3">
+            <Link to="/login" className="text-sm font-medium text-text-primary hover:text-primary transition-colors">
+              Log in
+            </Link>
+            <Link to="/register" className="text-sm font-medium bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg transition-colors">
+              Sign up
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   );
