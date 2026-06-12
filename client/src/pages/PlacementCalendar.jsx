@@ -17,11 +17,9 @@ const FilterSelect = ({ label, options }) => (
 export default function PlacementCalendar() {
   const [notices, setNotices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // We'll hardcode the viewing month to May 2025 for this UI mockup, 
-  // but we will render actual notices dynamically.
-  const viewingMonth = 4; // May (0-indexed)
-  const viewingYear = 2025;
+  
+  const today = new Date();
+  const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -38,11 +36,62 @@ export default function PlacementCalendar() {
     fetchNotices();
   }, []);
 
-  // Format date helper for the right panel
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-GB', options);
   };
+
+  const handlePrevMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+
+  const setToday = () => {
+    setCurrentDate(new Date(today.getFullYear(), today.getMonth(), 1));
+  };
+
+  const viewingMonth = currentDate.getMonth();
+  const viewingYear = currentDate.getFullYear();
+  const monthName = currentDate.toLocaleString('default', { month: 'long' });
+
+  // Calendar Math
+  const daysInMonth = new Date(viewingYear, viewingMonth + 1, 0).getDate();
+  const startDay = new Date(viewingYear, viewingMonth, 1).getDay(); // 0 = Sunday
+  const daysInPrevMonth = new Date(viewingYear, viewingMonth, 0).getDate();
+
+  const calendarCells = [];
+
+  // Previous month trailing days
+  for (let i = startDay - 1; i >= 0; i--) {
+    calendarCells.push({
+      dayNum: daysInPrevMonth - i,
+      isCurrentMonth: false,
+      monthOffset: -1
+    });
+  }
+
+  // Current month days
+  for (let i = 1; i <= daysInMonth; i++) {
+    calendarCells.push({
+      dayNum: i,
+      isCurrentMonth: true,
+      monthOffset: 0
+    });
+  }
+
+  // Next month leading days to fill 35 or 42 grid cells
+  const totalCells = Math.ceil(calendarCells.length / 7) * 7;
+  const remainingCells = totalCells - calendarCells.length;
+  for (let i = 1; i <= remainingCells; i++) {
+    calendarCells.push({
+      dayNum: i,
+      isCurrentMonth: false,
+      monthOffset: 1
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-7xl mx-auto h-full">
@@ -71,47 +120,49 @@ export default function PlacementCalendar() {
             <div className="p-4 border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex items-center">
-                  <button className="p-2 border border-border rounded-l-lg hover:bg-surface transition-colors">
+                  <button onClick={handlePrevMonth} className="p-2 border border-border rounded-l-lg hover:bg-surface transition-colors">
                     <ChevronLeft className="w-4 h-4 text-text-secondary" />
                   </button>
-                  <button className="p-2 border-y border-r border-border rounded-r-lg hover:bg-surface transition-colors">
+                  <button onClick={handleNextMonth} className="p-2 border-y border-r border-border rounded-r-lg hover:bg-surface transition-colors">
                     <ChevronRight className="w-4 h-4 text-text-secondary" />
                   </button>
                 </div>
-                <h2 className="text-xl font-bold text-white">May 2025</h2>
+                <h2 className="text-xl font-bold text-white w-32 text-center">{monthName} {viewingYear}</h2>
               </div>
-              <button className="text-sm px-4 py-2 border border-primary/50 text-primary hover:bg-primary/10 rounded-lg font-medium transition-colors">
+              <button onClick={setToday} className="text-sm px-4 py-2 border border-primary/50 text-primary hover:bg-primary/10 rounded-lg font-medium transition-colors">
                 Today
               </button>
             </div>
 
             {/* Grid */}
-            <div className="flex-1 grid grid-cols-7 grid-rows-[auto_1fr_1fr_1fr_1fr_1fr] border-b border-border">
+            <div className="flex-1 grid grid-cols-7 border-b border-border" style={{ gridTemplateRows: 'auto repeat(auto-fill, minmax(100px, 1fr))' }}>
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
                 <div key={day} className="p-3 text-center text-xs font-medium text-text-secondary border-b border-r border-border last:border-r-0">
                   {day}
                 </div>
               ))}
               
-              {/* Mock Days - 35 cells mapping dynamic notices if they match the date */}
-              {Array.from({ length: 35 }).map((_, i) => {
-                const dayNum = i - 3; // start from April 27
-                const isCurrentMonth = dayNum > 0 && dayNum <= 31;
-                const displayNum = isCurrentMonth ? dayNum : (dayNum <= 0 ? 30 + dayNum : dayNum - 31);
+              {calendarCells.map((cell, i) => {
+                const cellMonth = new Date(viewingYear, viewingMonth + cell.monthOffset, 1).getMonth();
+                const cellYear = new Date(viewingYear, viewingMonth + cell.monthOffset, 1).getFullYear();
                 
-                // Find notices for this specific day (Assuming May 2025)
+                // Find notices for this specific day
                 const dayNotices = notices.filter(n => {
                   const d = new Date(n.noticeDate);
-                  return isCurrentMonth && d.getDate() === displayNum && d.getMonth() === viewingMonth && d.getFullYear() === viewingYear;
+                  return d.getDate() === cell.dayNum && d.getMonth() === cellMonth && d.getFullYear() === cellYear;
                 });
 
+                const isToday = cell.isCurrentMonth && cell.dayNum === today.getDate() && viewingMonth === today.getMonth() && viewingYear === today.getFullYear();
+
                 return (
-                  <div key={i} className={`p-2 border-r border-b border-border last:border-r-0 min-h-[100px] ${!isCurrentMonth ? 'opacity-30' : ''}`}>
-                    <span className="text-sm font-medium text-text-secondary">{displayNum}</span>
+                  <div key={i} className={`p-2 border-r border-b border-border last:border-r-0 min-h-[100px] ${!cell.isCurrentMonth ? 'opacity-30' : ''} ${isToday ? 'bg-primary/5' : ''}`}>
+                    <span className={`text-sm font-medium ${isToday ? 'text-primary' : 'text-text-secondary'}`}>
+                      {cell.dayNum}
+                    </span>
                     <div className="mt-2 space-y-1 overflow-y-auto max-h-[70px] hide-scrollbar">
                       {dayNotices.map((n, idx) => (
                         <div key={idx} className="text-[10px] px-2 py-1 rounded border bg-primary/20 text-primary border-primary/30 truncate">
-                          ● {n.companyId?.name || 'Unknown'}<br/><span className="opacity-70">Notice Released</span>
+                          ● {n.companyId?.name || 'Unknown'}
                         </div>
                       ))}
                     </div>

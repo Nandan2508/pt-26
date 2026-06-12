@@ -6,7 +6,8 @@ import {
   CheckCircle2,
   BarChart2,
   Users,
-  RefreshCw
+  RefreshCw,
+  Building2
 } from 'lucide-react';
 import api from '../services/api';
 
