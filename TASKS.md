@@ -1216,7 +1216,7 @@ Build the eligibility logic.
 
 ---
 
-### [ ] P5-E1 [ELIGIBILITY]
+### [x] P5-E1 [ELIGIBILITY]
 
 Create Eligibility Service.
 
@@ -1231,7 +1231,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P5-E2 [ELIGIBILITY]
+### [x] P5-E2 [ELIGIBILITY]
 
 Create Eligibility API.
 
@@ -1256,7 +1256,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P5-E3 [ELIGIBILITY]
+### [x] P5-E3 [ELIGIBILITY]
 
 Integrate Eligibility Simulator Frontend.
 
