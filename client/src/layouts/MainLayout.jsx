@@ -5,11 +5,11 @@ import Navbar from '../components/Navbar';
 
 export default function MainLayout() {
   return (
-    <div className="flex min-h-screen bg-background text-text-primary font-sans">
+    <div className="flex h-screen bg-background text-text-primary font-sans overflow-hidden">
       <Sidebar />
-      <div className="flex-1 ml-64 flex flex-col relative min-h-screen">
+      <div className="flex-1 ml-64 flex flex-col h-screen overflow-hidden relative">
         <Navbar />
-        <main className="flex-1 p-8 overflow-auto">
+        <main className="flex-1 p-8 overflow-y-auto min-h-0">
           <Outlet />
         </main>
       </div>

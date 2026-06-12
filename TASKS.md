@@ -378,7 +378,7 @@ Acceptance Criteria
 
 ## Placement Updates
 
-### [ ] P0.5-P1 [COMPANY]
+### [x] P0.5-P1 [COMPANY]
 
 Create Placement Updates Page.
 
@@ -394,7 +394,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-P2 [COMPANY]
+### [x] P0.5-P2 [COMPANY]
 
 Create Search Bar.
 
@@ -406,7 +406,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-P3 [COMPANY]
+### [x] P0.5-P3 [COMPANY]
 
 Create Filters Section.
 
@@ -428,7 +428,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-P4 [COMPANY]
+### [x] P0.5-P4 [COMPANY]
 
 Create Placement Table.
 
@@ -442,7 +442,7 @@ Acceptance Criteria
 
 ## Eligibility Simulator
 
-### [ ] P0.5-E1 [ELIGIBILITY]
+### [x] P0.5-E1 [ELIGIBILITY]
 
 Create Eligibility Page.
 
@@ -458,7 +458,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-E2 [ELIGIBILITY]
+### [x] P0.5-E2 [ELIGIBILITY]
 
 Create Input Section.
 
@@ -476,7 +476,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-E3 [ELIGIBILITY]
+### [x] P0.5-E3 [ELIGIBILITY]
 
 Create Results Section.
 
@@ -498,7 +498,7 @@ Acceptance Criteria
 
 ## Placement Calendar
 
-### [ ] P0.5-C1 [CALENDAR]
+### [x] P0.5-C1 [CALENDAR]
 
 Create Calendar Page.
 
@@ -510,11 +510,13 @@ docs/images/placement-calendar.png
 
 Acceptance Criteria
 
-* Layout complete
+* Layout### Placement Calendar Mockup
+* [x] **P0.5-C1**: Create `PlacementCalendar.jsx` UI with full-page month grid.
+* [x] **P0.5-C2**: Implement mock event rendering inside calendar cells.
 
 ---
 
-### [ ] P0.5-C2 [CALENDAR]
+### [x] P0.5-C2 [CALENDAR]
 
 Create Calendar Grid.
 
@@ -528,7 +530,7 @@ Acceptance Criteria
 
 ## Discussion Hub
 
-### [ ] P0.5-H1 [DISCUSSION]
+### [x] P0.5-H1 [DISCUSSION]
 
 Create Discussion Hub Page.
 
@@ -540,11 +542,15 @@ docs/images/discussion-hub.png
 
 Acceptance Criteria
 
-* Layout complete
+* Layout### Discussion Hub Mockup
+* [x] **P0.5-H1**: Create `DiscussionHub.jsx` layout.
+* [x] **P0.5-H2**: Implement left sidebar/list of companies with active thread counts.
+* [x] **P0.5-H3**: Implement main discussion area showing mock threads (OA/Interview).
+* [x] **P0.5-H4**: Implement right sidebar for Popular Discussions & Guidelines.
 
 ---
 
-### [ ] P0.5-H2 [DISCUSSION]
+### [x] P0.5-H2 [DISCUSSION]
 
 Create Company Sidebar.
 
@@ -556,7 +562,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-H3 [DISCUSSION]
+### [x] P0.5-H3 [DISCUSSION]
 
 Create Chat Window.
 
@@ -568,7 +574,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-H4 [DISCUSSION]
+### [x] P0.5-H4 [DISCUSSION]
 
 Create Message Input.
 
@@ -580,7 +586,7 @@ Acceptance Criteria
 
 ## Interview Resources
 
-### [ ] P0.5-R1 [RESOURCE]
+### [x] P0.5-R1 [RESOURCE]
 
 Create Resources Page.
 
@@ -596,7 +602,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-R2 [RESOURCE]
+### [x] P0.5-R2 [RESOURCE]
 
 Create Resources Table.
 
@@ -618,7 +624,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-R3 [RESOURCE]
+### [x] P0.5-R3 [RESOURCE]
 
 Create View Questions Button.
 
@@ -632,7 +638,7 @@ Acceptance Criteria
 
 ## UI Validation
 
-### [ ] P0.5-V1 [SHARED]
+### [x] P0.5-V1 [SHARED]
 
 Desktop Audit.
 
@@ -642,7 +648,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-V2 [SHARED]
+### [x] P0.5-V2 [SHARED]
 
 Tablet Audit.
 
@@ -652,7 +658,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0.5-V3 [SHARED]
+### [x] P0.5-V3 [SHARED]
 
 Mobile Audit.
 
@@ -686,7 +692,7 @@ Define all schemas before building APIs.
 
 ## Users
 
-### [ ] P1-U1 [AUTH]
+### [x] P1-U1 [AUTH]
 
 Create User Schema.
 
@@ -714,7 +720,7 @@ Acceptance Criteria
 
 ## Companies
 
-### [ ] P1-C1 [COMPANY]
+### [x] P1-C1 [COMPANY]
 
 Create Company Schema.
 
@@ -739,7 +745,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P1-C2 [COMPANY]
+### [x] P1-C2 [COMPANY]
 
 Create slug generation middleware.
 
@@ -763,7 +769,7 @@ Acceptance Criteria
 
 ## Notices
 
-### [ ] P1-N1 [CALENDAR]
+### [x] P1-N1 [CALENDAR]
 
 Create Notice Schema.
 
@@ -783,7 +789,7 @@ Acceptance Criteria
 
 ## Resources
 
-### [ ] P1-R1 [RESOURCE]
+### [x] P1-R1 [RESOURCE]
 
 Create Resource Schema.
 
@@ -803,7 +809,7 @@ Acceptance Criteria
 
 ## Discussions
 
-### [ ] P1-D1 [DISCUSSION]
+### [x] P1-D1 [DISCUSSION]
 
 Create Discussion Schema.
 
@@ -827,7 +833,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P1-D2 [DISCUSSION]
+### [x] P1-D2 [DISCUSSION]
 
 Create Message Schema.
 

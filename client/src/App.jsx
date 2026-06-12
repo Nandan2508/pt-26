@@ -4,13 +4,11 @@ import MainLayout from './layouts/MainLayout';
 
 // Pages
 import Dashboard from './pages/Dashboard';
-
-// Mock Pages for routing (to be implemented later)
-const PlaceholderPage = ({ title }) => (
-  <div className="flex items-center justify-center h-full text-text-secondary text-2xl font-semibold">
-    {title} Page coming soon...
-  </div>
-);
+import PlacementUpdates from './pages/PlacementUpdates';
+import EligibilitySimulator from './pages/EligibilitySimulator';
+import PlacementCalendar from './pages/PlacementCalendar';
+import DiscussionHub from './pages/DiscussionHub';
+import InterviewResources from './pages/InterviewResources';
 
 function App() {
   return (
@@ -19,11 +17,11 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/placement-updates" element={<PlaceholderPage title="Placement Updates" />} />
-          <Route path="/eligibility-simulator" element={<PlaceholderPage title="Eligibility Simulator" />} />
-          <Route path="/placement-calendar" element={<PlaceholderPage title="Placement Calendar" />} />
-          <Route path="/discussion" element={<PlaceholderPage title="Discussion Hub" />} />
-          <Route path="/resources" element={<PlaceholderPage title="PYQ Repository" />} />
+          <Route path="/placement-updates" element={<PlacementUpdates />} />
+          <Route path="/eligibility-simulator" element={<EligibilitySimulator />} />
+          <Route path="/placement-calendar" element={<PlacementCalendar />} />
+          <Route path="/discussion" element={<DiscussionHub />} />
+          <Route path="/resources" element={<InterviewResources />} />
         </Route>
       </Routes>
     </BrowserRouter>
