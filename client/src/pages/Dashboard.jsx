@@ -88,8 +88,8 @@ export default function Dashboard() {
             View All Updates <ArrowRight className="w-4 h-4" />
           </button>
         </div>
-        <div className="overflow-auto flex-1 min-h-0">
-          <table className="w-full text-left text-sm text-text-secondary relative">
+        <div className="overflow-x-auto w-full flex-1 min-h-0">
+          <table className="w-full text-left text-sm text-text-secondary relative min-w-[800px]">
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>

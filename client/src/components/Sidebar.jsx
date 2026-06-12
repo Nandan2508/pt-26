@@ -25,9 +25,22 @@ const navItems = [
   { name: 'PYQ Repository', path: '/resources', icon: BookOpen },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, setIsOpen }) {
   return (
-    <div className="w-64 h-screen bg-background border-r border-border flex flex-col fixed left-0 top-0">
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={cn(
+        "w-64 h-screen bg-background border-r border-border flex flex-col fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
       {/* Logo Area */}
       <div className="h-16 flex items-center px-6 border-b border-border">
         <div className="flex items-center gap-3">
@@ -78,5 +91,6 @@ export default function Sidebar() {
         </button>
       </div>
     </div>
+    </>
   );
 }

@@ -158,11 +158,11 @@ export default function EligibilitySimulator() {
               </div>
 
               {/* Table */}
-              <div className="overflow-x-auto flex-1">
+                <div className="overflow-x-auto flex-1 w-full">
                 {currentList.length === 0 ? (
                   <div className="text-center py-10 text-text-secondary">No companies in this category.</div>
                 ) : (
-                  <table className="w-full text-left text-sm text-text-secondary">
+                  <table className="w-full text-left text-sm text-text-secondary min-w-[500px]">
                     <thead className="text-xs border-b border-border">
                       <tr>
                         <th className="px-4 py-3 font-medium text-text-secondary">Company</th>

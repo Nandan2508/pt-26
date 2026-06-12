@@ -196,8 +196,8 @@ export default function AdminDashboard() {
               <div className="p-4 border-b border-border">
                 <h3 className="text-lg font-semibold text-white">Manage Companies</h3>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm text-text-secondary">
+              <div className="overflow-x-auto w-full">
+                <table className="w-full text-left text-sm text-text-secondary min-w-[500px]">
                   <thead className="bg-surface text-xs border-b border-border">
                     <tr>
                       <th className="p-3">Company</th>

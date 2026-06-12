@@ -135,12 +135,13 @@ export default function PlacementCalendar() {
             </div>
 
             {/* Grid */}
-            <div className="flex-1 grid grid-cols-7 border-b border-border" style={{ gridTemplateRows: 'auto repeat(auto-fill, minmax(100px, 1fr))' }}>
-              {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="p-3 text-center text-xs font-medium text-text-secondary border-b border-r border-border last:border-r-0">
-                  {day}
-                </div>
-              ))}
+            <div className="overflow-x-auto w-full">
+              <div className="flex-1 grid grid-cols-7 border-b border-border min-w-[700px]" style={{ gridTemplateRows: 'auto repeat(auto-fill, minmax(100px, 1fr))' }}>
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                  <div key={day} className="p-3 text-center text-xs font-medium text-text-secondary border-b border-r border-border last:border-r-0">
+                    {day}
+                  </div>
+                ))}
               
               {calendarCells.map((cell, i) => {
                 const cellMonth = new Date(viewingYear, viewingMonth + cell.monthOffset, 1).getMonth();
@@ -170,6 +171,7 @@ export default function PlacementCalendar() {
                 );
               })}
             </div>
+          </div>
 
             {/* Legend */}
             <div className="p-4 flex items-center gap-6 overflow-x-auto">
