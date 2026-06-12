@@ -26,7 +26,19 @@ const getNotices = async (req, res) => {
   }
 };
 
+const deleteNotice = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await noticeService.deleteNotice(id);
+    res.status(200).json({ message: 'Notice deleted successfully' });
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({ message: error.message || 'Server Error' });
+  }
+};
+
 module.exports = {
   createNotice,
-  getNotices
+  getNotices,
+  deleteNotice
 };

@@ -140,7 +140,7 @@ export default function PlacementUpdates() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto w-full flex-1 min-h-0 relative">
+        <div className="w-full flex-1 min-h-0 relative flex flex-col">
           {isLoading && companies.length > 0 && (
             <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-20 flex items-center justify-center">
               <div className="flex flex-col items-center gap-3">
@@ -149,119 +149,196 @@ export default function PlacementUpdates() {
               </div>
             </div>
           )}
-          <table className="w-full text-left text-sm text-text-secondary relative min-w-[800px]">
-            <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
-              <tr>
-                <th className="px-3 py-3 font-medium">Company</th>
-                <th className="px-3 py-3 font-medium">JD</th>
-                <th className="px-3 py-3 font-medium">Type</th>
-                <th className="px-3 py-3 font-medium">Stipend</th>
-                <th className="px-3 py-3 font-medium">Package</th>
-                <th className="px-3 py-3 font-medium text-center border-x border-border/50">
-                  <div className="border-b border-border/50 pb-1 mb-1 text-center">CGPA Cutoff</div>
-                  <div className="flex justify-between px-1">
-                    <span>Normal</span>
-                    <span>Internal</span>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden flex-1 overflow-y-auto space-y-4 p-4">
+            {(() => {
+              if (isLoading && companies.length === 0) {
+                return (
+                  <div className="flex flex-col items-center gap-3 py-8 text-text-secondary">
+                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    Loading companies...
                   </div>
-                </th>
-                <th className="px-3 py-3 font-medium">Branches Allowed</th>
-                <th className="px-3 py-3 font-medium text-center">Discussion Link</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {(() => {
-                if (isLoading && companies.length === 0) {
-                  return (
-                    <tr>
-                      <td colSpan="8" className="p-8 text-center text-text-secondary">
-                        <div className="flex flex-col items-center gap-3">
-                          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-                          Loading companies...
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                }
-                
-                if (companies.length === 0) {
-                  return (
-                    <tr>
-                      <td colSpan="8" className="p-8 text-center text-text-secondary">No companies found.</td>
-                    </tr>
-                  );
-                }
+                );
+              }
+              
+              if (companies.length === 0) {
+                return <div className="text-center py-8 text-text-secondary">No companies found.</div>;
+              }
 
-                const grouped = Object.values(companies.reduce((acc, curr) => {
-                  if (!acc[curr.name]) acc[curr.name] = { name: curr.name, roles: [] };
-                  acc[curr.name].roles.push(curr);
-                  return acc;
-                }, {}));
+              const grouped = Object.values(companies.reduce((acc, curr) => {
+                if (!acc[curr.name]) acc[curr.name] = { name: curr.name, roles: [] };
+                acc[curr.name].roles.push(curr);
+                return acc;
+              }, {}));
 
-                return grouped.map((company) => (
-                  <React.Fragment key={company.name}>
+              return grouped.map((company) => (
+                <div key={company.name} className="bg-surface border border-border rounded-lg p-4 space-y-3">
+                  <div className="flex items-center gap-3 border-b border-border pb-3">
+                    <div className="w-8 h-8 rounded bg-white flex items-center justify-center text-background text-sm font-bold shrink-0">
+                      {company.name[0]?.toUpperCase()}
+                    </div>
+                    <span className="font-semibold text-white truncate text-base">{company.name}</span>
+                  </div>
+                  
+                  <div className="space-y-4">
                     {company.roles.map((update, idx) => (
-                      <tr key={update._id} className="hover:bg-surface/50 transition-colors">
-                        {idx === 0 && (
-                          <td rowSpan={company.roles.length} className="px-3 py-3 font-medium text-white border-b border-border align-top">
-                            <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 rounded bg-white flex items-center justify-center text-background text-xs font-bold shrink-0">
-                                {company.name[0]?.toUpperCase()}
-                              </div>
-                              <span className="truncate max-w-[150px]" title={company.name}>{company.name}</span>
-                            </div>
-                          </td>
-                        )}
-                        <td className="px-3 py-3">
-                          <div className="flex flex-col gap-1">
-                            <span>{update.role || '—'}</span>
-                            {update.jdLink && (
-                              <a 
-                                href={update.jdLink} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="text-xs text-primary hover:underline flex items-center gap-1"
-                              >
-                                View Doc <ExternalLink className="w-3 h-3" />
-                              </a>
-                            )}
+                      <div key={update._id} className={idx > 0 ? "pt-3 border-t border-border/50" : ""}>
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="font-medium text-sm text-white">{update.role || '—'}</div>
+                          {update.jdLink && (
+                            <a href={update.jdLink} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1 shrink-0">
+                              View JD <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-text-secondary block mb-0.5">Type</span>
+                            <span className="text-white">{update.type || '—'}</span>
                           </div>
-                        </td>
-                        <td className="px-3 py-3">{update.type}</td>
-                        <td className="px-3 py-3">{update.stipend || '—'}</td>
-                        <td className="px-3 py-3">{update.package || '—'}</td>
-                        <td className="px-3 py-3 border-x border-border/50">
-                          <div className="flex justify-between px-1">
-                            <span className="text-white whitespace-nowrap">{update.normalCutoff}</span>
-                            <span className="text-white whitespace-nowrap">{update.internalCutoff}</span>
+                          <div>
+                            <span className="text-text-secondary block mb-0.5">Stipend</span>
+                            <span className="text-white">{update.stipend || '—'}</span>
                           </div>
-                        </td>
-                        <td className="px-3 py-3 text-xs">
-                          <div className="flex flex-wrap gap-1 max-w-[200px]">
-                            {update.branches?.length > 0 
-                              ? update.branches.map((branch, i) => (
-                                  <span key={i} className="bg-surface-highlight border border-border px-1.5 py-0.5 rounded text-[10px] whitespace-nowrap">
-                                    {branch}
-                                  </span>
-                                ))
-                              : '—'
-                            }
+                          <div>
+                            <span className="text-text-secondary block mb-0.5">Package</span>
+                            <span className="text-white">{update.package || '—'}</span>
                           </div>
-                        </td>
-                        <td className="px-3 py-3 text-center">
-                          <button 
-                            onClick={() => navigate(`/discussion/${update.slug}`)}
-                            className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap"
-                          >
-                            Join <ExternalLink className="w-3 h-3" />
-                          </button>
+                          <div>
+                            <span className="text-text-secondary block mb-0.5">Discussion</span>
+                            <button 
+                              onClick={() => navigate(`/discussion/${update.slug}`)}
+                              className="text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+                            >
+                              Join <ExternalLink className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ));
+            })()}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto w-full flex-1 min-h-0 relative">
+            <table className="w-full text-left text-sm text-text-secondary relative min-w-[800px]">
+              <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
+                <tr>
+                  <th className="px-3 py-3 font-medium">Company</th>
+                  <th className="px-3 py-3 font-medium">JD</th>
+                  <th className="px-3 py-3 font-medium">Type</th>
+                  <th className="px-3 py-3 font-medium">Stipend</th>
+                  <th className="px-3 py-3 font-medium">Package</th>
+                  <th className="px-3 py-3 font-medium text-center border-x border-border/50">
+                    <div className="border-b border-border/50 pb-1 mb-1 text-center">CGPA Cutoff</div>
+                    <div className="flex justify-between px-1">
+                      <span>Normal</span>
+                      <span>Internal</span>
+                    </div>
+                  </th>
+                  <th className="px-3 py-3 font-medium">Branches Allowed</th>
+                  <th className="px-3 py-3 font-medium text-center">Discussion Link</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {(() => {
+                  if (isLoading && companies.length === 0) {
+                    return (
+                      <tr>
+                        <td colSpan="8" className="p-8 text-center text-text-secondary">
+                          <div className="flex flex-col items-center gap-3">
+                            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                            Loading companies...
+                          </div>
                         </td>
                       </tr>
-                    ))}
-                  </React.Fragment>
-                ));
-              })()}
-            </tbody>
-          </table>
+                    );
+                  }
+                  
+                  if (companies.length === 0) {
+                    return (
+                      <tr>
+                        <td colSpan="8" className="p-8 text-center text-text-secondary">No companies found.</td>
+                      </tr>
+                    );
+                  }
+
+                  const grouped = Object.values(companies.reduce((acc, curr) => {
+                    if (!acc[curr.name]) acc[curr.name] = { name: curr.name, roles: [] };
+                    acc[curr.name].roles.push(curr);
+                    return acc;
+                  }, {}));
+
+                  return grouped.map((company) => (
+                    <React.Fragment key={company.name}>
+                      {company.roles.map((update, idx) => (
+                        <tr key={update._id} className="hover:bg-surface/50 transition-colors">
+                          {idx === 0 && (
+                            <td rowSpan={company.roles.length} className="px-3 py-3 font-medium text-white border-b border-border align-top">
+                              <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded bg-white flex items-center justify-center text-background text-xs font-bold shrink-0">
+                                  {company.name[0]?.toUpperCase()}
+                                </div>
+                                <span className="truncate max-w-[150px]" title={company.name}>{company.name}</span>
+                              </div>
+                            </td>
+                          )}
+                          <td className="px-3 py-3">
+                            <div className="flex flex-col gap-1">
+                              <span>{update.role || '—'}</span>
+                              {update.jdLink && (
+                                <a 
+                                  href={update.jdLink} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-xs text-primary hover:underline flex items-center gap-1"
+                                >
+                                  View Doc <ExternalLink className="w-3 h-3" />
+                                </a>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-3 py-3">{update.type}</td>
+                          <td className="px-3 py-3">{update.stipend || '—'}</td>
+                          <td className="px-3 py-3">{update.package || '—'}</td>
+                          <td className="px-3 py-3 border-x border-border/50">
+                            <div className="flex justify-between px-1">
+                              <span className="text-white whitespace-nowrap">{update.normalCutoff}</span>
+                              <span className="text-white whitespace-nowrap">{update.internalCutoff}</span>
+                            </div>
+                          </td>
+                          <td className="px-3 py-3 text-xs">
+                            <div className="flex flex-wrap gap-1 max-w-[200px]">
+                              {update.branches?.length > 0 
+                                ? update.branches.map((branch, i) => (
+                                    <span key={i} className="bg-surface-highlight border border-border px-1.5 py-0.5 rounded text-[10px] whitespace-nowrap">
+                                      {branch}
+                                    </span>
+                                  ))
+                                : '—'
+                              }
+                            </div>
+                          </td>
+                          <td className="px-3 py-3 text-center">
+                            <button 
+                              onClick={() => navigate(`/discussion/${update.slug}`)}
+                              className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap"
+                            >
+                              Join <ExternalLink className="w-3 h-3" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  ));
+                })()}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Pagination */}

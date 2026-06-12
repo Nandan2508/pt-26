@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  Trash2
 } from 'lucide-react';
 import api from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const FilterSelect = ({ label, options }) => (
   <div className="flex flex-col gap-1">
@@ -17,6 +19,7 @@ const FilterSelect = ({ label, options }) => (
 export default function PlacementCalendar() {
   const [notices, setNotices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
   
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -39,6 +42,17 @@ export default function PlacementCalendar() {
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-GB', options);
+  };
+
+  const handleDeleteNotice = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this notice?')) return;
+    try {
+      await api.delete(`/notices/${id}`);
+      setNotices(notices.filter(n => n._id !== id));
+    } catch (error) {
+      console.error('Failed to delete notice:', error);
+      alert('Failed to delete notice');
+    }
   };
 
   const handlePrevMonth = () => {
@@ -217,7 +231,18 @@ export default function PlacementCalendar() {
                       <span className="text-xs text-text-secondary">Notice Released</span>
                     </div>
                   </div>
-                  <span className="text-xs text-primary font-medium">{formatDate(notice.noticeDate)}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-primary font-medium">{formatDate(notice.noticeDate)}</span>
+                    {user?.role === 'admin' && (
+                      <button 
+                        onClick={() => handleDeleteNotice(notice._id)}
+                        className="text-text-secondary hover:text-red-500 transition-colors"
+                        title="Delete Notice"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))
             )}

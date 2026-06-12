@@ -23,7 +23,18 @@ const getNotices = async () => {
     .sort({ noticeDate: -1 });
 };
 
+const deleteNotice = async (id) => {
+  const notice = await Notice.findByIdAndDelete(id);
+  if (!notice) {
+    const error = new Error('Notice not found');
+    error.statusCode = 404;
+    throw error;
+  }
+  return notice;
+};
+
 module.exports = {
   createNotice,
-  getNotices
+  getNotices,
+  deleteNotice
 };
