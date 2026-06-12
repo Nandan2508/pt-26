@@ -19,6 +19,7 @@ export default function AdminDashboard() {
     name: '', role: '', type: 'FTE', stipend: '', package: '', normalCutoff: '', internalCutoff: '', branches: ''
   });
   const [jdFile, setJdFile] = useState(null);
+  const [editingCompanyId, setEditingCompanyId] = useState(null);
 
   // Notices State
   const [newNotice, setNewNotice] = useState({ companyId: '', noticeDate: '' });
@@ -54,27 +55,53 @@ export default function AdminDashboard() {
       formData.append('package', newCompany.package);
       formData.append('normalCutoff', newCompany.normalCutoff);
       formData.append('internalCutoff', newCompany.internalCutoff);
-      // Append branches as a JSON string or multiple fields. Since the backend expects an array,
-      // and we are sending FormData, we should send it as a JSON string and parse it in backend,
-      // or append each branch. Let's send multiple 'branches' fields so backend array receives it.
       branchesArray.forEach(b => formData.append('branches', b));
       
       if (jdFile) {
         formData.append('jdFile', jdFile);
       }
 
-      await api.post('/companies', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      alert('Company created successfully!');
+      if (editingCompanyId) {
+        await api.put(`/companies/${editingCompanyId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        alert('Company updated successfully!');
+      } else {
+        await api.post('/companies', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        alert('Company created successfully!');
+      }
+
       setNewCompany({ name: '', role: '', type: 'FTE', stipend: '', package: '', normalCutoff: '', internalCutoff: '', branches: '' });
       setJdFile(null);
+      setEditingCompanyId(null);
       fetchCompanies();
     } catch (error) {
-      alert(error.response?.data?.message || 'Failed to create company');
+      alert(error.response?.data?.message || 'Failed to save company');
     }
+  };
+
+  const handleEditClick = (company) => {
+    setEditingCompanyId(company._id);
+    setNewCompany({
+      name: company.name,
+      role: company.role,
+      type: company.type,
+      stipend: company.stipend || '',
+      package: company.package || '',
+      normalCutoff: company.normalCutoff,
+      internalCutoff: company.internalCutoff,
+      branches: company.branches.join(', ')
+    });
+    setJdFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingCompanyId(null);
+    setNewCompany({ name: '', role: '', type: 'FTE', stipend: '', package: '', normalCutoff: '', internalCutoff: '', branches: '' });
+    setJdFile(null);
   };
 
   const handleDeleteCompany = async (id) => {
@@ -131,7 +158,9 @@ export default function AdminDashboard() {
         {activeTab === 'companies' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-1 bg-surface-highlight border border-border p-5 rounded-xl h-fit">
-              <h3 className="text-lg font-semibold text-white mb-4">Add Company</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">
+                {editingCompanyId ? 'Edit Company' : 'Add Company'}
+              </h3>
               <form onSubmit={handleCreateCompany} className="flex flex-col gap-3">
                 <input required type="text" placeholder="Company Name" value={newCompany.name} onChange={e => setNewCompany({...newCompany, name: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
                 <input required type="text" placeholder="JD Title (e.g. SDE)" value={newCompany.role} onChange={e => setNewCompany({...newCompany, role: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
@@ -150,9 +179,16 @@ export default function AdminDashboard() {
                 <input required type="number" step="0.01" placeholder="Normal Cutoff" value={newCompany.normalCutoff} onChange={e => setNewCompany({...newCompany, normalCutoff: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
                 <input required type="number" step="0.01" placeholder="Internal Cutoff" value={newCompany.internalCutoff} onChange={e => setNewCompany({...newCompany, internalCutoff: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
                 <input required type="text" placeholder="Branches (comma separated)" value={newCompany.branches} onChange={e => setNewCompany({...newCompany, branches: e.target.value})} className="bg-surface border border-border rounded p-2 text-sm text-white" />
-                <button type="submit" className="bg-primary hover:bg-primary-hover text-white py-2 rounded font-medium mt-2 flex items-center justify-center gap-2">
-                  <Plus className="w-4 h-4" /> Add Company
-                </button>
+                <div className="flex gap-2 mt-2">
+                  <button type="submit" className="flex-1 bg-primary hover:bg-primary-hover text-white py-2 rounded font-medium flex items-center justify-center gap-2">
+                    {editingCompanyId ? 'Update Company' : <><Plus className="w-4 h-4" /> Add Company</>}
+                  </button>
+                  {editingCompanyId && (
+                    <button type="button" onClick={cancelEdit} className="bg-surface border border-border text-text-secondary hover:text-white py-2 px-4 rounded font-medium flex items-center justify-center">
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
 
@@ -180,7 +216,7 @@ export default function AdminDashboard() {
                         <td className="p-3">{company.normalCutoff} / {company.internalCutoff}</td>
                         <td className="p-3 text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <button className="p-1.5 text-blue-400 hover:bg-blue-400/10 rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
+                            <button onClick={() => handleEditClick(company)} className="p-1.5 text-blue-400 hover:bg-blue-400/10 rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
                             <button onClick={() => handleDeleteCompany(company._id)} className="p-1.5 text-danger hover:bg-danger/10 rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
                           </div>
                         </td>
