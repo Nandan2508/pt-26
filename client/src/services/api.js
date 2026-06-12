@@ -6,6 +6,15 @@ const api = axios.create({
   withCredentials: true, // Send cookies with requests
 });
 
+// Global request interceptor to inject token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Global response error interceptor
 api.interceptors.response.use(
   (response) => {

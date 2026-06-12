@@ -23,7 +23,8 @@ const register = async (req, res) => {
     
     res.status(201).json({
       message: 'User registered successfully',
-      user
+      user,
+      token
     });
   } catch (error) {
     const statusCode = error.statusCode || 500;
@@ -45,7 +46,8 @@ const login = async (req, res) => {
 
     res.status(200).json({
       message: 'Logged in successfully',
-      user
+      user,
+      token
     });
   } catch (error) {
     const statusCode = error.statusCode || 500;
