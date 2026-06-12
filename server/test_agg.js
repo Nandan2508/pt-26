@@ -22,25 +22,40 @@ async function run() {
     },
     {
       $addFields: {
-        hasNotice: { $gt: [{ $size: "$notices" }, 0] },
-        latestNoticeDate: {
+        roleHasNotice: { $gt: [{ $size: "$notices" }, 0] },
+        roleNoticeDate: {
           $cond: {
             if: { $gt: [{ $size: "$notices" }, 0] },
-            then: { $add: [ { $max: "$notices.noticeDate" }, 86399000 ] },
+            then: { $max: "$notices.noticeDate" },
             else: "$createdAt"
           }
         }
       }
     },
+    // Group by company name
+    {
+      $group: {
+        _id: "$name",
+        roles: { $push: "$$ROOT" },
+        hasNotice: { $max: "$roleHasNotice" },
+        latestNoticeDate: { $max: "$roleNoticeDate" },
+        createdAt: { $max: "$createdAt" }
+      }
+    },
+    // Sort the groups
     { $sort: { hasNotice: -1, latestNoticeDate: -1, _id: -1 } },
     { $skip: skip },
     { $limit: Number(limit) },
-    { $project: { notices: 0 } }
+    // Flatten the roles back into an array of documents
+    { $unwind: "$roles" },
+    // Replace the root to be the role document itself
+    { $replaceRoot: { newRoot: "$roles" } },
+    { $project: { notices: 0, roleHasNotice: 0, roleNoticeDate: 0 } }
   ]);
   
-  console.log('--- Top 10 Companies ---');
+  console.log('--- Top Roles ---');
   companies.forEach(c => {
-    console.log(c.name + ' | hasNotice: ' + c.hasNotice + ' | latestNoticeDate: ' + c.latestNoticeDate);
+    console.log(c.name + ' | role: ' + c.role + ' | createdAt: ' + c.createdAt);
   });
   
   process.exit(0);

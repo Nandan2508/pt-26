@@ -89,8 +89,8 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
     },
     {
       $addFields: {
-        hasNotice: { $gt: [{ $size: "$notices" }, 0] },
-        latestNoticeDate: {
+        roleHasNotice: { $gt: [{ $size: "$notices" }, 0] },
+        roleNoticeDate: {
           $cond: {
             if: { $gt: [{ $size: "$notices" }, 0] },
             then: { $max: "$notices.noticeDate" },
@@ -99,10 +99,21 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
         }
       }
     },
+    {
+      $group: {
+        _id: "$name",
+        roles: { $push: "$$ROOT" },
+        hasNotice: { $max: "$roleHasNotice" },
+        latestNoticeDate: { $max: "$roleNoticeDate" },
+        createdAt: { $max: "$createdAt" }
+      }
+    },
     { $sort: { hasNotice: -1, latestNoticeDate: -1, _id: -1 } },
     { $skip: skip },
     { $limit: Number(limit) },
-    { $project: { notices: 0 } }
+    { $unwind: "$roles" },
+    { $replaceRoot: { newRoot: "$roles" } },
+    { $project: { notices: 0, roleHasNotice: 0, roleNoticeDate: 0 } }
   ]);
 
   const total = await Company.countDocuments(query);
@@ -114,7 +125,7 @@ const getCompanies = async ({ search, role, type, branch, normalCutoff, internal
     total,
     totalCompaniesCount,
     page: Number(page),
-    pages: Math.ceil(total / limit),
+    pages: Math.ceil(totalCompaniesCount / limit),
   };
 };
 

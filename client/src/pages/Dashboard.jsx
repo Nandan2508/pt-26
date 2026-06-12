@@ -89,18 +89,18 @@ export default function Dashboard() {
           </button>
         </div>
         <div className="overflow-x-auto w-full flex-1 min-h-0">
-          <table className="w-full text-left text-sm text-text-secondary relative min-w-[800px]">
+          <table className="w-full text-left text-sm text-text-secondary relative md:min-w-[800px]">
             <thead className="text-xs uppercase bg-surface text-text-secondary sticky top-0 z-10 shadow-sm">
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
-                <th className="px-3 py-3 font-medium">JD</th>
+                <th className="px-3 py-3 font-medium hidden md:table-cell">JD</th>
                 <th className="px-3 py-3 font-medium">Type</th>
                 <th className="px-3 py-3 font-medium">Stipend</th>
                 <th className="px-3 py-3 font-medium">Package</th>
-                <th className="px-3 py-3 font-medium text-center">CGPA Normal</th>
-                <th className="px-3 py-3 font-medium text-center">CGPA Internal</th>
-                <th className="px-3 py-3 font-medium">Branches Allowed (Max 10)</th>
-                <th className="px-3 py-3 font-medium text-center">Discussion</th>
+                <th className="px-3 py-3 font-medium text-center hidden md:table-cell">CGPA Normal</th>
+                <th className="px-3 py-3 font-medium text-center hidden md:table-cell">CGPA Internal</th>
+                <th className="px-3 py-3 font-medium hidden md:table-cell">Branches Allowed (Max 10)</th>
+                <th className="px-3 py-3 font-medium text-center hidden md:table-cell">Discussion</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -127,7 +127,7 @@ export default function Dashboard() {
                             </div>
                           </td>
                         )}
-                        <td className="px-3 py-3">
+                        <td className="px-3 py-3 hidden md:table-cell">
                           <div className="flex flex-col gap-1">
                             <span>{update.role || '—'}</span>
                             {update.jdLink && (
@@ -145,9 +145,9 @@ export default function Dashboard() {
                         <td className="px-3 py-3">{update.type || '—'}</td>
                         <td className="px-3 py-3">{update.stipend || '—'}</td>
                         <td className="px-3 py-3">{update.package || '—'}</td>
-                        <td className="px-3 py-3 text-center whitespace-nowrap">{update.normalCutoff || '—'}</td>
-                        <td className="px-3 py-3 text-center whitespace-nowrap">{update.internalCutoff || '—'}</td>
-                        <td className="px-3 py-3 text-xs">
+                        <td className="px-3 py-3 text-center whitespace-nowrap hidden md:table-cell">{update.normalCutoff || '—'}</td>
+                        <td className="px-3 py-3 text-center whitespace-nowrap hidden md:table-cell">{update.internalCutoff || '—'}</td>
+                        <td className="px-3 py-3 text-xs hidden md:table-cell">
                           <div className="flex flex-wrap gap-1 max-w-[200px]">
                             {update.branches?.length > 0 
                               ? update.branches.map((branch, i) => (
@@ -159,7 +159,7 @@ export default function Dashboard() {
                             }
                           </div>
                         </td>
-                        <td className="px-3 py-3 text-center">
+                        <td className="px-3 py-3 text-center hidden md:table-cell">
                           <button 
                             onClick={() => navigate(`/discussion/${update.slug}`)}
                             className="text-xs px-2 py-1.5 border border-primary/50 hover:border-primary text-primary hover:bg-primary/10 rounded-md flex items-center justify-center gap-1 mx-auto transition-colors whitespace-nowrap"
