@@ -62,7 +62,7 @@ MongoDB connection working.
 
 ## Shared
 
-### [ ] P0-S1 [SHARED]
+### [x] P0-S1 [SHARED]
 
 Create repository structure.
 
@@ -113,7 +113,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0-S2 [SHARED]
+### [x] P0-S2 [SHARED]
 
 Setup MongoDB Atlas.
 
@@ -136,7 +136,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0-S3 [SHARED]
+### [x] P0-S3 [SHARED]
 
 Create environment configuration.
 
@@ -157,7 +157,7 @@ Acceptance Criteria
 
 ---
 
-### [ ] P0-S4 [SHARED]
+### [x] P0-S4 [SHARED]
 
 Configure Axios instance.
 
@@ -1202,13 +1202,295 @@ Acceptance Criteria
 
 * Preview eligibility count shown
 
-This is already much closer to the engineering-task style of your NexGen repo. The next half (Phases 5–10) should cover:
+# Phase 5 — Eligibility Engine
 
-Eligibility Engine
-Placement Calendar
-Discussion Hub (Socket.io)
-Interview Resources
-Admin Panel
-Deployment & Hardening
+Goal
 
-with another ~30–40 atomic tasks.
+Build the eligibility logic.
+
+---
+
+### [ ] P5-E1 [ELIGIBILITY]
+
+Create Eligibility Service.
+
+Logic
+
+* Compare internalCGPA with internalCutoff
+* Check if branch exists in branches array
+
+Acceptance Criteria
+
+* Logic correctly identifies Eligible, Near Eligible, Not Eligible
+
+---
+
+### [ ] P5-E2 [ELIGIBILITY]
+
+Create Eligibility API.
+
+Route
+
+```text
+POST /eligibility/simulate
+```
+
+Input
+
+```json
+{
+  "internalCGPA": 8.24,
+  "branch": "COE"
+}
+```
+
+Acceptance Criteria
+
+* API returns eligibility status for all active companies
+
+---
+
+### [ ] P5-E3 [ELIGIBILITY]
+
+Integrate Eligibility Simulator Frontend.
+
+Acceptance Criteria
+
+* Call API with form inputs
+* Render results in respective categories
+
+---
+
+# Phase 6 — Placement Calendar
+
+Goal
+
+Track notice release dates.
+
+---
+
+### [ ] P6-N1 [CALENDAR]
+
+Create Notice Service.
+
+Functions
+
+```text
+createNotice
+getNotices
+```
+
+Acceptance Criteria
+
+* Service logic isolated
+
+---
+
+### [ ] P6-N2 [CALENDAR]
+
+Create Notice APIs.
+
+Routes
+
+```text
+POST /notices
+GET /notices
+```
+
+Acceptance Criteria
+
+* POST is Admin Only
+* GET returns sorted notices
+
+---
+
+### [ ] P6-N3 [CALENDAR]
+
+Integrate Calendar Frontend.
+
+Acceptance Criteria
+
+* Fetch and display notices in calendar view
+
+---
+
+# Phase 7 — Discussion Hub
+
+Goal
+
+Realtime company-specific discussions.
+
+---
+
+### [ ] P7-D1 [DISCUSSION]
+
+Setup Socket.io Server.
+
+Events
+
+```text
+connection
+join-room
+send-message
+disconnect
+```
+
+Acceptance Criteria
+
+* Socket server runs alongside Express
+
+---
+
+### [ ] P7-D2 [DISCUSSION]
+
+Create Discussion APIs.
+
+Routes
+
+```text
+GET /discussions/:companyId/:type/messages
+```
+
+Acceptance Criteria
+
+* Returns message history for a room
+
+---
+
+### [ ] P7-D3 [DISCUSSION]
+
+Integrate Socket.io Client.
+
+Acceptance Criteria
+
+* Users can join room, send and receive messages in real-time
+
+---
+
+# Phase 8 — Interview Resources
+
+Goal
+
+Manage and view external resource links.
+
+---
+
+### [ ] P8-R1 [RESOURCE]
+
+Create Resource APIs.
+
+Routes
+
+```text
+POST /resources
+GET /resources
+```
+
+Acceptance Criteria
+
+* POST is Admin Only
+* GET is Authenticated Only
+
+---
+
+### [ ] P8-R2 [RESOURCE]
+
+Integrate Resources Frontend.
+
+Acceptance Criteria
+
+* Fetch and display table of resources
+* External links open in new tab
+
+---
+
+# Phase 9 — Admin Panel
+
+Goal
+
+Manage platform data.
+
+---
+
+### [ ] P9-A1 [ADMIN]
+
+Create Admin Middleware.
+
+Responsibilities
+
+* Verify user role is 'admin'
+
+Acceptance Criteria
+
+* Blocks non-admin users from admin routes
+
+---
+
+### [ ] P9-A2 [ADMIN]
+
+Create Admin Seeder.
+
+Script
+
+```text
+npm run seed:admin
+```
+
+Acceptance Criteria
+
+* Creates initial admin user
+
+---
+
+### [ ] P9-A3 [ADMIN]
+
+Create Admin Management Pages.
+
+Sections
+
+* Companies Management
+* Notices Management
+* Resources Management
+
+Acceptance Criteria
+
+* UI to create, edit, delete entities
+
+---
+
+# Phase 10 — Deployment & Hardening
+
+Goal
+
+Prepare for production.
+
+---
+
+### [ ] P10-D1 [SHARED]
+
+Configure CORS for production.
+
+Acceptance Criteria
+
+* Only allow frontend domain
+
+---
+
+### [ ] P10-D2 [SHARED]
+
+Implement Rate Limiting.
+
+Acceptance Criteria
+
+* Protect APIs from abuse
+
+---
+
+### [ ] P10-D3 [SHARED]
+
+Deploy.
+
+Acceptance Criteria
+
+* Frontend on Vercel
+* Backend on Render

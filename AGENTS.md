@@ -222,6 +222,17 @@ The platform does not track:
 /admin/resources
 ```
 
+## Backend API Routes
+
+```text
+/auth/register
+/auth/login
+/auth/me
+/auth/logout
+/companies
+/companies/:id
+```
+
 ---
 
 # 7. Database Contracts
@@ -279,7 +290,8 @@ admin
 {
   "_id": "ObjectId",
   "companyId": "ObjectId",
-  "noticeDate": "2026-07-20"
+  "noticeDate": "2026-07-20",
+  "createdAt": "date"
 }
 ```
 
@@ -597,6 +609,8 @@ Email validation:
 
 Only.
 
+Admin accounts cannot be registered publicly. The first admin must be created using a database seeder script.
+
 ---
 
 Authentication Method
@@ -656,6 +670,7 @@ components/
 layouts/
 hooks/
 services/
+contexts/
 
 server/src
 controllers/
@@ -664,6 +679,7 @@ routes/
 middlewares/
 services/
 sockets/
+utils/
 
 config/
 ```

@@ -1,0 +1,26 @@
+require('dotenv').config();
+const express = require('express');
+const connectDB = require('../../config/db');
+
+// Verify required environment variables
+const requiredEnvVars = ['PORT', 'MONGO_URI', 'JWT_SECRET', 'CLIENT_URL', 'NODE_ENV'];
+const missingVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+
+if (missingVars.length > 0) {
+  console.error(`FATAL ERROR: Missing required environment variables: ${missingVars.join(', ')}`);
+  process.exit(1);
+}
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Connect to Database
+connectDB();
+
+app.get('/', (req, res) => {
+  res.send('Thapar Placement Tracker API is running');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
