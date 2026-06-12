@@ -179,8 +179,17 @@ export default function PlacementUpdates() {
                       <span className="text-white whitespace-nowrap">{update.internalCutoff}</span>
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-xs max-w-[150px] truncate" title={update.branches?.join(', ')}>
-                    {update.branches?.join(', ')}
+                  <td className="px-3 py-3 text-xs">
+                    <div className="flex flex-wrap gap-1 max-w-[200px]">
+                      {update.branches?.length > 0 
+                        ? update.branches.map((branch, i) => (
+                            <span key={i} className="bg-surface-highlight border border-border px-1.5 py-0.5 rounded text-[10px] whitespace-nowrap">
+                              {branch}
+                            </span>
+                          ))
+                        : '—'
+                      }
+                    </div>
                   </td>
                   <td className="px-3 py-3 text-center">
                     <button 
