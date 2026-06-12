@@ -54,4 +54,4 @@ companySchema.pre('save', function (next) {
 
 const Company = mongoose.model('Company', companySchema);
 
-module.exports = ;
+module.exports = Company;

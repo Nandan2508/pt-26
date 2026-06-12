@@ -18,4 +18,4 @@ const discussionSchema = new mongoose.Schema(
 
 const Discussion = mongoose.model('Discussion', discussionSchema);
 
-module.exports = ;
+module.exports = Discussion;
