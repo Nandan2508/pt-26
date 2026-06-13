@@ -462,7 +462,7 @@ Acceptance Criteria
 
 Create Input Section.
 
-Fields
+Fields.
 
 ```text
 Internal CGPA
